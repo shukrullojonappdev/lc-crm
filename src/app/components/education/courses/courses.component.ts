@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { Course } from 'src/app/api/course';
+
 import { MessageService } from 'primeng/api';
+import { CoursesService } from 'src/app/service/courses.service';
 import { ProductService } from 'src/app/service/product.service';
 
 @Component({
@@ -8,40 +11,33 @@ import { ProductService } from 'src/app/service/product.service';
   styleUrl: './courses.component.scss'
 })
 export class CoursesComponent {
-  productDialog: boolean = false;
-
+  courseDialog: boolean = false;
   deleteProductDialog: boolean = false;
-
   deleteProductsDialog: boolean = false;
-
   products: any[] = [];
-
-  product: any = {};
-
+  course: Course;
   selectedProducts: any[] = [];
-
   submitted: boolean = false;
-
   cols: any[] = [];
-
   statuses: any[] = [];
-
   rowsPerPageOptions = [5, 10, 20];
+  courses: Course[] = [];
 
   constructor(
     private productService: ProductService,
+    private coursesService: CoursesService,
     private messageService: MessageService
   ) {}
 
   ngOnInit() {
     this.productService.getProducts().then((data) => (this.products = data));
+    this.coursesService.getCourses(1).subscribe((res: any) => {
+      this.courses = res.results;
+    });
 
     this.cols = [
-      { field: 'product', header: 'any' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
+      { field: 'ID', header: 'any' },
+      { field: 'title', header: 'Title' }
     ];
 
     this.statuses = [
@@ -52,23 +48,21 @@ export class CoursesComponent {
   }
 
   openNew() {
-    this.product = {};
     this.submitted = false;
-    this.productDialog = true;
+    this.courseDialog = true;
   }
 
   deleteSelectedProducts() {
     this.deleteProductsDialog = true;
   }
 
-  editProduct(product: any) {
-    this.product = { ...product };
-    this.productDialog = true;
+  editCourse(course: any) {
+    console.log(course);
+    this.courseDialog = true;
   }
 
-  deleteProduct(product: any) {
+  deleteCourse(product: any) {
     this.deleteProductDialog = true;
-    this.product = { ...product };
   }
 
   confirmDeleteSelected() {
@@ -87,58 +81,21 @@ export class CoursesComponent {
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.products = this.products.filter((val) => val.id !== this.product.id);
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
       detail: 'any Deleted',
       life: 3000
     });
-    this.product = {};
   }
 
   hideDialog() {
-    this.productDialog = false;
+    this.courseDialog = false;
     this.submitted = false;
   }
 
   saveProduct() {
     this.submitted = true;
-
-    if (this.product.name?.trim()) {
-      if (this.product.id) {
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus.value
-          ? this.product.inventoryStatus.value
-          : this.product.inventoryStatus;
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'any Updated',
-          life: 3000
-        });
-      } else {
-        this.product.id = this.createId();
-        this.product.code = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus
-          ? this.product.inventoryStatus.value
-          : 'INSTOCK';
-        this.products.push(this.product);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'any Created',
-          life: 3000
-        });
-      }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
-    }
   }
 
   findIndexById(id: string): number {

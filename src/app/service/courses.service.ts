@@ -15,6 +15,6 @@ export class CoursesService {
       next: string;
       previous: string;
       results: Course[];
-    }>(`${environment.apiUrl}/api/courses/?page=${page}`);
+    }>(`${environment.apiUrl}/api/course?page=${page}`);
   }
 }
