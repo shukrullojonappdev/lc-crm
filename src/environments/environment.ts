@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api-lms.al-raqam.com'
+  apiUrl: 'https://api-lms.al-raqam.com',
+  version: 'v1.0.0'
 };
 
 /*
