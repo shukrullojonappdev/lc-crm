@@ -1,0 +1,20 @@
+<p-toast></p-toast>
+<form class="pt-2" [formGroup]="phoneForm" (ngSubmit)="sendOtp()">
+  <span class="p-float-label">
+    <p-inputMask
+      [class]="invalidPhone ? 'ng-invalid ng-dirty' : ''"
+      mask="+999-99-999-99-99"
+      formControlName="phone"
+      id="phone"
+    ></p-inputMask>
+    <label for="phone">Phone</label>
+  </span>
+  <button
+    type="submit"
+    [loading]="btnLoading"
+    pButton
+    pRipple
+    label="Send SMS"
+    class="w-full mt-4"
+  ></button>
+</form>

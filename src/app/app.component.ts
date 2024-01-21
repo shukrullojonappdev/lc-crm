@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { AuthService } from './service/auth.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html'
+  selector: 'app-root',
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private authService: AuthService
+  ) {}
 
-    constructor(private primengConfig: PrimeNGConfig) { }
-
-    ngOnInit() {
-        this.primengConfig.ripple = true;
-    }
+  ngOnInit() {
+    this.primengConfig.ripple = true;
+    this.authService.initTokens();
+  }
 }

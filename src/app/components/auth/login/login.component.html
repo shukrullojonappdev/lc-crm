@@ -1,0 +1,85 @@
+<p-toast></p-toast>
+<div
+  class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+>
+  <div class="flex flex-column align-items-center justify-content-center">
+    <img
+      src="assets/layout/images/{{
+        layoutService.config().colorScheme === 'light'
+          ? 'logo-dark'
+          : 'logo-white'
+      }}.svg"
+      alt="Sakai logo"
+      class="mb-5 w-6rem flex-shrink-0"
+    />
+    <div
+      style="
+        border-radius: 56px;
+        padding: 0.3rem;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 10%,
+          rgba(33, 150, 243, 0) 30%
+        );
+      "
+    >
+      <div
+        class="w-full surface-card py-8 px-5 sm:px-8"
+        style="border-radius: 53px"
+      >
+        <div class="text-center mb-5">
+          <span class="text-600 font-medium">Sign in to continue</span>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="pt-2">
+          <span class="p-float-label">
+            <p-inputMask
+              class="w-full"
+              [class]="invalidPhone ? 'ng-invalid ng-dirty' : ''"
+              mask="+999-99-999-99-99"
+              formControlName="phone"
+              id="phone"
+            ></p-inputMask>
+            <label for="phone">Phone</label>
+          </span>
+          <span class="p-float-label mt-5">
+            <p-password
+              class="w-full"
+              formControlName="password"
+              id="password"
+              [feedback]="false"
+              [toggleMask]="true"
+            ></p-password>
+            <label for="password">Password</label>
+          </span>
+          <div
+            class="flex align-items-center justify-content-between mb-5 gap-5 mt-4"
+          >
+            <div class="flex align-items-center">
+              <p-checkbox
+                id="rememberme1"
+                formControlName="rememberMe"
+                [binary]="true"
+                styleClass="mr-2"
+              ></p-checkbox>
+              <label for="rememberme1">Remember me</label>
+            </div>
+            <a
+              class="font-medium no-underline ml-2 text-right cursor-pointer"
+              style="color: var(--primary-color)"
+              >Forgot password?</a
+            >
+          </div>
+          <button
+            type="submit"
+            [loading]="btnLoading"
+            pButton
+            pRipple
+            label="Login"
+            class="w-full"
+          ></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

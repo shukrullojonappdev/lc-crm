@@ -1,0 +1,23 @@
+<div class="pt-2">
+  <span class="p-float-label">
+    <input pInputText [(ngModel)]="fullname" id="fullname" class="w-full" />
+    <label for="fullname">Fullname</label>
+  </span>
+  <span class="p-float-label mt-5">
+    <p-password
+      [(ngModel)]="password"
+      id="password"
+      [feedback]="false"
+      [toggleMask]="true"
+    ></p-password>
+    <label for="password">Password</label>
+  </span>
+  <button
+    [loading]="btnLoading"
+    pButton
+    pRipple
+    label="Create account"
+    class="w-full mt-4"
+    (click)="setInfo()"
+  ></button>
+</div>

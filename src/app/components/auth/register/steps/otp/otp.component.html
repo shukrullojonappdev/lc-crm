@@ -1,0 +1,18 @@
+<form class="pt-2" [formGroup]="otpForm" (ngSubmit)="checkOtp()">
+  <span class="p-float-label">
+    <p-inputMask
+      mask="9 9 9 9"
+      formControlName="otpCode"
+      id="otpCode"
+    ></p-inputMask>
+    <label for="otpCode">OTP</label>
+  </span>
+  <button
+    [loading]="btnLoading"
+    pButton
+    pRipple
+    label="Check code"
+    class="w-full mt-4"
+    type="submit"
+  ></button>
+</form>
