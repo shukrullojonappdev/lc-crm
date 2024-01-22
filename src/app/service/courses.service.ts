@@ -17,4 +17,16 @@ export class CoursesService {
       results: Course[];
     }>(`${environment.apiUrl}/api/course?page=${page}`);
   }
+
+  getCourse() {}
+
+  createCourse(course: Course) {
+    return this.http.post<Course>(`${environment.apiUrl}/api/course/`, course);
+  }
+
+  updateCourse(course: Course) {}
+
+  deleteCourse(id: string) {
+    return this.http.delete(`${environment.apiUrl}/api/course/${id}`);
+  }
 }
