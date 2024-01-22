@@ -4,7 +4,7 @@ import { RegisterComponent } from './register.component';
 import { PhoneComponent } from './steps/phone/phone.component';
 import { OtpComponent } from './steps/otp/otp.component';
 import { InfoComponent } from './steps/info/info.component';
-
+import { regStepGuard } from 'src/app/guard/reg-step.guard';
 const routes: Routes = [
   {
     path: '',
@@ -12,14 +12,17 @@ const routes: Routes = [
     children: [
       {
         path: 'phone',
+        canActivate: [regStepGuard],
         component: PhoneComponent
       },
       {
         path: 'otp/:phone',
+        canActivate: [regStepGuard],
         component: OtpComponent
       },
       {
         path: 'info/:phone',
+        canActivate: [regStepGuard],
         component: InfoComponent
       },
       {

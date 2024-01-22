@@ -2,23 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
+type RegSteps = 'phone' | 'otp' | 'info';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   refreshToken: string = '';
   accessToken: string = '';
+  registerSteps: RegSteps = 'phone';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   sendOtp(phone: string) {
     const tempPhone = phone.replaceAll('-', '');
+    this.registerSteps = 'otp';
+    sessionStorage.setItem('regStep', this.registerSteps);
     return this.http.post(`${environment.apiUrl}/api/sentOTP/`, {
       phone_number: tempPhone
     });
   }
 
   checkOtp(otp: string, phone: string) {
+    this.registerSteps = 'info';
+    sessionStorage.setItem('regStep', this.registerSteps);
     return this.http.post(`${environment.apiUrl}/api/sentOTP_and_phone/`, {
       phone_number: phone,
       verification_code: otp
@@ -26,6 +33,7 @@ export class AuthService {
   }
 
   createUser(payload: { phone: string; full_name: string; password: string }) {
+    this.registerSteps;
     return this.http.post(`${environment.apiUrl}/api/userApi/`, payload);
   }
 
@@ -51,6 +59,10 @@ export class AuthService {
   }
 
   initTokens() {
+    // * For init register step
+    this.registerSteps =
+      (sessionStorage.getItem('regStep') as RegSteps) || 'phone';
+
     if (localStorage.getItem('tokens')) {
       const tokens = JSON.parse(localStorage.getItem('tokens'));
       this.accessToken = tokens.access;
@@ -72,11 +84,15 @@ export class AuthService {
   }
 
   getAccessToken(): string {
-    return this.accessToken
+    return this.accessToken;
   }
 
   getRefreshToken(): string {
-    return this.refreshToken
+    return this.refreshToken;
+  }
+
+  getStep(): RegSteps {
+    return this.registerSteps;
   }
 
   logout() {
