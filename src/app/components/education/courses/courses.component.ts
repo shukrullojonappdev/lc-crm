@@ -15,7 +15,7 @@ export class CoursesComponent {
   editCourseDialog: boolean = false;
   deleteCourseDialog: boolean = false;
   deleteCoursesDialog: boolean = false;
-  selectedCourse;
+  selectedCourse: Course | null = null;
   cols: any[] = [];
   statuses: any[] = [];
   courses: Course[] = [];
@@ -69,6 +69,10 @@ export class CoursesComponent {
     this.selectedCourse = course;
   }
 
+  openDeleteCoursesDialog() {
+    this.deleteCoursesDialog = true;
+  }
+
   // Close dialog functions
   hideNewCourseDialog() {
     this.newCourseDialog = false;
@@ -85,12 +89,17 @@ export class CoursesComponent {
     this.selectedCourse = null;
   }
 
+  hideDeleteCoursesDialog() {
+    this.deleteCourseDialog = false;
+  }
+
   // Dialog actions
   createNewCourse() {
     if (this.newCourseForm.valid) {
       this.coursesService
         .createCourse(this.newCourseForm.value as Course)
         .subscribe(() => {
+          this.newCourseForm.reset();
           this.newCourseDialog = false;
           this.messageService.add({
             severity: 'success',
@@ -116,22 +125,26 @@ export class CoursesComponent {
     }
   }
 
+  updateCourse() {
+    if (this.editCourseForm.valid) {
+      this.coursesService
+        .updateCourse(this.editCourseForm.value as Course)
+        .subscribe(() => {
+          this.editCourseForm.reset();
+          this.editCourseDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Course updated'
+          });
+          this.getCourses(this.page);
+        });
+    }
+  }
+
   deleteCourses() {
-    this.deleteCourseDialog = true;
-  }
-
-  confirmDeleteSelected() {
-    this.deleteCoursesDialog = false;
-  }
-
-  confirmDelete() {
-    this.deleteCourseDialog = false;
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'any Deleted',
-      life: 3000
-    });
+    this.deleteCoursesDialog = true;
+    console.log(this.selectedCourses);
   }
 
   onGlobalFilter(table: any, event: Event) {

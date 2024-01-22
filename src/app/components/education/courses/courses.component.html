@@ -19,8 +19,8 @@
               label="Delete"
               icon="pi pi-trash"
               class="p-button-danger"
-              (click)="deleteSelectedCourses()"
-              [disabled]="!selectedProducts || !selectedProducts.length"
+              (click)="openDeleteCoursesDialog()"
+              [disabled]="!selectedCourses || !selectedCourses.length"
             ></button>
           </div>
         </ng-template>
@@ -174,7 +174,7 @@
     <!-- *  Edit element dialog -->
     <p-dialog
       [(visible)]="editCourseDialog"
-      [style]="{ width: '450px' }"
+      [style]="{ width: '450px', margin: '0 10px' }"
       header="Edit Course"
       [modal]="true"
       class="p-fluid"
@@ -213,7 +213,7 @@
           label="Save"
           icon="pi pi-check"
           class="p-button-text"
-          (click)="saveProduct()"
+          (click)="updateCourse()"
         ></button>
       </ng-template>
     </p-dialog>
@@ -223,7 +223,7 @@
       [(visible)]="deleteCourseDialog"
       header="Confirm"
       [modal]="true"
-      [style]="{ width: '450px' }"
+      [style]="{ width: '450px', margin: '0 10px' }"
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
@@ -257,7 +257,7 @@
       [(visible)]="deleteCoursesDialog"
       header="Confirm"
       [modal]="true"
-      [style]="{ width: '450px' }"
+      [style]="{ width: '450px', margin: '0 10px' }"
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
@@ -270,7 +270,7 @@
           icon="pi pi-times"
           class="p-button-text"
           label="No"
-          (click)="deleteProductsDialog = false"
+          (click)="hideDeleteCoursesDialog()"
         ></button>
         <button
           pButton
@@ -278,7 +278,7 @@
           icon="pi pi-check"
           class="p-button-text"
           label="Yes"
-          (click)="confirmDeleteSelected()"
+          (click)="deleteCourses()"
         ></button>
       </ng-template>
     </p-dialog>

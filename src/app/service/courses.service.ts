@@ -18,13 +18,20 @@ export class CoursesService {
     }>(`${environment.apiUrl}/api/course?page=${page}`);
   }
 
-  getCourse() {}
+  getCourse(id: string) {
+    return this.http.get<Course>(`${environment.apiUrl}/api/course/${id}`);
+  }
 
   createCourse(course: Course) {
     return this.http.post<Course>(`${environment.apiUrl}/api/course/`, course);
   }
 
-  updateCourse(course: Course) {}
+  updateCourse(course: Course) {
+    return this.http.put<Course>(
+      `${environment.apiUrl}/api/course/${course.id}/`,
+      course
+    );
+  }
 
   deleteCourse(id: string) {
     return this.http.delete(`${environment.apiUrl}/api/course/${id}`);
