@@ -4,9 +4,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { NotfoundComponent } from './components/notfound/notfound.component';
-import { ProductService } from './service/product.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { CoursesService } from './service/courses.service';
 
 @NgModule({
   declarations: [AppComponent, NotfoundComponent],
@@ -14,8 +14,8 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
-    ProductService
+    CoursesService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
