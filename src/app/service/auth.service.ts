@@ -9,7 +9,7 @@ export class AuthService {
   refreshToken: string = '';
   accessToken: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   sendOtp(phone: string) {
     const tempPhone = phone.replaceAll('-', '');
@@ -69,6 +69,14 @@ export class AuthService {
 
   saveTokensToSessionStorage(tokens: { access: string; refresh: string }) {
     sessionStorage.setItem('tokens', JSON.stringify(tokens));
+  }
+
+  getAccessToken(): string {
+    return this.accessToken
+  }
+
+  getRefreshToken(): string {
+    return this.refreshToken
   }
 
   logout() {

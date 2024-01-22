@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CoursesRoutingModule } from './courses-routing.module';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
@@ -23,10 +23,11 @@ import { MessageService } from 'primeng/api';
   declarations: [CoursesComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     CoursesRoutingModule,
     TableModule,
     FileUploadModule,
-    FormsModule,
     ButtonModule,
     RippleModule,
     ToastModule,
@@ -41,4 +42,4 @@ import { MessageService } from 'primeng/api';
   ],
   providers: [MessageService]
 })
-export class CoursesModule {}
+export class CoursesModule { }

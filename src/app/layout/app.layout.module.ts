@@ -43,6 +43,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     AppConfigModule,
     ConfirmDialogModule
   ],
-  exports: [AppLayoutComponent]
+  exports: [AppLayoutComponent],
 })
-export class AppLayoutModule {}
+export class AppLayoutModule { }

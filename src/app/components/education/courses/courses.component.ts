@@ -3,7 +3,7 @@ import { Course } from 'src/app/api/course';
 
 import { MessageService } from 'primeng/api';
 import { CoursesService } from 'src/app/service/courses.service';
-import { ProductService } from 'src/app/service/product.service';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-courses',
@@ -11,113 +11,127 @@ import { ProductService } from 'src/app/service/product.service';
   styleUrl: './courses.component.scss'
 })
 export class CoursesComponent {
-  courseDialog: boolean = false;
-  deleteProductDialog: boolean = false;
-  deleteProductsDialog: boolean = false;
-  products: any[] = [];
-  course: Course;
-  selectedProducts: any[] = [];
-  submitted: boolean = false;
+  newCourseDialog: boolean = false;
+  editCourseDialog: boolean = false;
+  deleteCourseDialog: boolean = false;
+  deleteCoursesDialog: boolean = false;
+  selectedCourse;
   cols: any[] = [];
   statuses: any[] = [];
-  rowsPerPageOptions = [5, 10, 20];
   courses: Course[] = [];
+  selectedCourses: Course[] = [];
+  page: number = 1;
+
+  newCourseForm = this.fb.group({
+    title: ['', Validators.required],
+    descriptions: ['']
+  });
+
+  editCourseForm = this.fb.group({
+    id: ['', Validators.required],
+    title: ['', Validators.required],
+    descriptions: ['']
+  });
 
   constructor(
-    private productService: ProductService,
     private coursesService: CoursesService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
-    this.productService.getProducts().then((data) => (this.products = data));
-    this.coursesService.getCourses(1).subscribe((res: any) => {
-      this.courses = res.results;
-    });
+    this.getCourses(this.page);
 
     this.cols = [
       { field: 'ID', header: 'any' },
       { field: 'title', header: 'Title' }
     ];
-
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
   }
 
-  openNew() {
-    this.submitted = false;
-    this.courseDialog = true;
+  getCourses(page: number) {
+    this.coursesService.getCourses(page).subscribe((res: any) => {
+      this.courses = res.results;
+    });
   }
 
-  deleteSelectedProducts() {
-    this.deleteProductsDialog = true;
+  // Open dialog functions
+  openNewCourseDialog() {
+    this.newCourseDialog = true;
   }
 
-  editCourse(course: any) {
-    console.log(course);
-    this.courseDialog = true;
+  openEditCourseDialog(course: Course) {
+    this.editCourseDialog = true;
+    this.editCourseForm.setValue(course);
   }
 
-  deleteCourse(product: any) {
-    this.deleteProductDialog = true;
+  openDeleteCourseDialog(course: Course) {
+    this.deleteCourseDialog = true;
+    this.selectedCourse = course;
+  }
+
+  // Close dialog functions
+  hideNewCourseDialog() {
+    this.newCourseDialog = false;
+    this.newCourseForm.reset();
+  }
+
+  hideEditCourseDialog() {
+    this.editCourseDialog = false;
+    this.editCourseForm.reset();
+  }
+
+  hideDeleteCourseDialog() {
+    this.deleteCourseDialog = false;
+    this.selectedCourse = null;
+  }
+
+  // Dialog actions
+  createNewCourse() {
+    if (this.newCourseForm.valid) {
+      this.coursesService
+        .createCourse(this.newCourseForm.value as Course)
+        .subscribe(() => {
+          this.newCourseDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'New course created'
+          });
+          this.getCourses(this.page);
+        });
+    }
+  }
+
+  deleteCourse() {
+    if (this.selectedCourse.id) {
+      this.coursesService.deleteCourse(this.selectedCourse.id).subscribe(() => {
+        this.deleteCourseDialog = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Course deleted'
+        });
+        this.getCourses(this.page);
+      });
+    }
+  }
+
+  deleteCourses() {
+    this.deleteCourseDialog = true;
   }
 
   confirmDeleteSelected() {
-    this.deleteProductsDialog = false;
-    this.products = this.products.filter(
-      (val) => !this.selectedProducts.includes(val)
-    );
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Products Deleted',
-      life: 3000
-    });
-    this.selectedProducts = [];
+    this.deleteCoursesDialog = false;
   }
 
   confirmDelete() {
-    this.deleteProductDialog = false;
+    this.deleteCourseDialog = false;
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
       detail: 'any Deleted',
       life: 3000
     });
-  }
-
-  hideDialog() {
-    this.courseDialog = false;
-    this.submitted = false;
-  }
-
-  saveProduct() {
-    this.submitted = true;
-  }
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
-
-  createId(): string {
-    let id = '';
-    const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
   }
 
   onGlobalFilter(table: any, event: Event) {
