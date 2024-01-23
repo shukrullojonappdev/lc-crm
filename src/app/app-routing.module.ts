@@ -33,6 +33,13 @@ import { authGuard } from './guard/auth.guard';
                 import('./components/education/education.module').then(
                   (m) => m.EducationModule
                 )
+            },
+            {
+              path: 'process',
+              loadChildren: () =>
+                import('./components/process/process.module').then(
+                  (m) => m.ProcessModule
+                )
             }
           ]
         },
@@ -54,4 +61,4 @@ import { authGuard } from './guard/auth.guard';
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
