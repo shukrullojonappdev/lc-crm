@@ -16,10 +16,9 @@ export class CoursesComponent {
   deleteCourseDialog: boolean = false;
   deleteCoursesDialog: boolean = false;
   selectedCourse: Course | null = null;
-  cols: any[] = [];
-  statuses: any[] = [];
-  courses: Course[] = [];
   selectedCourses: Course[] = [];
+  courses: Course[] = [];
+  loading = true;
 
   // * Paginator values
   page: number = 1;
@@ -44,21 +43,18 @@ export class CoursesComponent {
 
   ngOnInit() {
     this.getCourses(this.page);
-
-    this.cols = [
-      { field: 'ID', header: 'any' },
-      { field: 'title', header: 'Title' }
-    ];
   }
 
   getCourses(page: number) {
     this.coursesService.getCourses(page).subscribe((res: any) => {
       this.totalRecords = res.count;
       this.courses = res.results;
+      this.loading = false;
     });
   }
 
   onPageChange(e: any) {
+    this.loading = true;
     this.getCourses(e.page + 1);
     this.selectedCourses = [];
   }

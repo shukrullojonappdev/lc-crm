@@ -50,10 +50,12 @@
       <p-table
         #dt
         [value]="courses"
-        [columns]="cols"
+        dataKey="id"
         [(selection)]="selectedCourses"
         selectionMode="multiple"
         [rowHover]="true"
+        [rows]="10"
+        [loading]="loading"
       >
         <ng-template pTemplate="caption">
           <div
