@@ -1,0 +1,23 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          <p-button
+            [text]="true"
+            severity="secondary"
+            icon="pi pi-arrow-left"
+            class="mr-2"
+          ></p-button>
+        </div>
+        <div class="p-toolbar-group-center"></div>
+        <div class="p-toolbar-group-end">
+          <p-button icon="pi pi-save" class="mr-2"></p-button>
+        </div>
+      </p-toolbar>
+      <span routerLink="/process/homework/groups/2/students">students</span>
+      <p-table [value]=""></p-table>
+    </div>
+  </div>
+</div>

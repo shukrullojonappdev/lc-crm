@@ -72,6 +72,21 @@ export class AppMenuComponent implements OnInit {
             routerLink: ['/pages/rooms']
           }
         ]
+      },
+      {
+        label: $localize`Process`,
+        items: [
+          {
+            label: $localize`Homework`,
+            icon: 'pi pi-fw pi-flag',
+            routerLink: ['/process/homework']
+          },
+          {
+            label: $localize`Schedule`,
+            icon: 'pi pi-fw pi-calendar',
+            routerLink: ['/process/schedule']
+          }
+        ]
       }
     ];
   }
