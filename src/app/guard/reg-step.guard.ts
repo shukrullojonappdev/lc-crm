@@ -9,7 +9,7 @@ export const regStepGuard: CanActivateFn = (route, state) => {
   const step = authService.getStep();
 
   if (step !== route.url[0]?.path) {
-    router.navigate(['/auth/register', step]);
+    router.navigate(['/auth/register/', step]);
     return false;
   }
 
