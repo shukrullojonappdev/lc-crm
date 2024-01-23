@@ -16,11 +16,13 @@ export class CoursesComponent {
   deleteCourseDialog: boolean = false;
   deleteCoursesDialog: boolean = false;
   selectedCourse: Course | null = null;
-  cols: any[] = [];
-  statuses: any[] = [];
-  courses: Course[] = [];
   selectedCourses: Course[] = [];
+  courses: Course[] = [];
+  loading = true;
+
+  // * Paginator values
   page: number = 1;
+  totalRecords = 0;
 
   newCourseForm = this.fb.group({
     title: ['', Validators.required],
@@ -41,17 +43,20 @@ export class CoursesComponent {
 
   ngOnInit() {
     this.getCourses(this.page);
-
-    this.cols = [
-      { field: 'ID', header: 'any' },
-      { field: 'title', header: 'Title' }
-    ];
   }
 
   getCourses(page: number) {
     this.coursesService.getCourses(page).subscribe((res: any) => {
+      this.totalRecords = res.count;
       this.courses = res.results;
+      this.loading = false;
     });
+  }
+
+  onPageChange(e: any) {
+    this.loading = true;
+    this.getCourses(e.page + 1);
+    this.selectedCourses = [];
   }
 
   // Open dialog functions
@@ -71,6 +76,7 @@ export class CoursesComponent {
 
   openDeleteCoursesDialog() {
     this.deleteCoursesDialog = true;
+    console.log(this.selectedCourses);
   }
 
   // Close dialog functions
@@ -90,7 +96,7 @@ export class CoursesComponent {
   }
 
   hideDeleteCoursesDialog() {
-    this.deleteCourseDialog = false;
+    this.deleteCoursesDialog = false;
   }
 
   // Dialog actions
@@ -143,8 +149,23 @@ export class CoursesComponent {
   }
 
   deleteCourses() {
-    this.deleteCoursesDialog = true;
-    console.log(this.selectedCourses);
+    this.selectedCourses.forEach((e, index) => {
+      if (e.id) {
+        this.coursesService.deleteCourse(e.id).subscribe(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Course deleted'
+          });
+
+          if (this.selectedCourses.length - 1 === index) {
+            this.deleteCoursesDialog = false;
+            this.getCourses(this.page);
+            this.selectedCourses = [];
+          }
+        });
+      }
+    });
   }
 
   onGlobalFilter(table: any, event: Event) {
