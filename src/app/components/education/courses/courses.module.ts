@@ -18,6 +18,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { CoursesComponent } from './courses.component';
 import { MessageService } from 'primeng/api';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -38,8 +39,9 @@ import { MessageService } from 'primeng/api';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
-    DialogModule
+    DialogModule,
+    PaginatorModule
   ],
   providers: [MessageService]
 })
-export class CoursesModule { }
+export class CoursesModule {}
