@@ -11,6 +11,7 @@ export class AuthService {
   refreshToken: string = '';
   accessToken: string = '';
   registerSteps: RegSteps = 'phone';
+  tokensIn: 'local' | 'session' | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -44,14 +45,24 @@ export class AuthService {
     });
   }
 
+  refreshAccessToken() {
+    return this.http.post(`${environment.apiUrl}/token/refresh/`, {
+      refresh: this.refreshToken
+    });
+  }
+
   async setTokens(
     tokens: { access: string; refresh: string },
-    remembeMe: boolean
+    remembeMe: boolean | null
   ) {
     this.accessToken = tokens.access;
     this.refreshToken = tokens.refresh;
 
-    if (remembeMe) {
+    // * Check tokens place for refresh access token
+    if (remembeMe == null) {
+      if (this.tokensIn === 'local') this.saveTokensToLocalStorage(tokens);
+      if (this.tokensIn === 'session') this.saveTokensToSessionStorage(tokens);
+    } else if (remembeMe) {
       this.saveTokensToLocalStorage(tokens);
     } else {
       this.saveTokensToSessionStorage(tokens);
@@ -67,19 +78,23 @@ export class AuthService {
       const tokens = JSON.parse(localStorage.getItem('tokens'));
       this.accessToken = tokens.access;
       this.refreshToken = tokens.refresh;
+      this.tokensIn = 'local';
     }
     if (sessionStorage.getItem('tokens')) {
       const tokens = JSON.parse(sessionStorage.getItem('tokens'));
       this.accessToken = tokens.access;
       this.refreshToken = tokens.refresh;
+      this.tokensIn = 'session';
     }
   }
 
   saveTokensToLocalStorage(tokens: { access: string; refresh: string }) {
+    this.tokensIn = 'local';
     localStorage.setItem('tokens', JSON.stringify(tokens));
   }
 
   saveTokensToSessionStorage(tokens: { access: string; refresh: string }) {
+    this.tokensIn = 'session';
     sessionStorage.setItem('tokens', JSON.stringify(tokens));
   }
 
