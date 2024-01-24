@@ -18,53 +18,65 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     const accessToken = this.authService.getAccessToken();
-    const refreshToken = this.authService.getRefreshToken();
 
-    const newReq = request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    return next.handle(newReq).pipe(
-      tap({
-        next: (_e) => {},
-        error: (err) => {
-          if (err.status === 403) {
-            this.authService.refreshAccessToken().subscribe(
-              (res: any) => {
-                const refresh = this.authService.getRefreshToken();
-                const access = res.access;
-
-                this.authService
-                  .setTokens({ access, refresh }, null)
-                  .then((_res) => {
-                    // * Refresh page after token refreshed
-                    const currentUrl = this.router.url;
-                    this.router
-                      .navigateByUrl('/', {
-                        skipLocationChange: true
-                      })
-                      .then(() => {
-                        this.router.navigate([currentUrl]);
-                      });
-                  });
-              },
-              (_err) => {
-                this.authService.logout();
-                this.router
-                  .navigateByUrl('/', {
-                    skipLocationChange: true
-                  })
-                  .then(() => {
-                    this.router.navigate(['/auth/login']);
-                  });
-              }
-            );
-          }
+    if (request.headers.get('Anonymous')) {
+      const newHeaders = request.headers.delete('Anonymous');
+      const newRequest = request.clone({
+        headers: newHeaders,
+        setHeaders: {
+          Authorization: 'Bearer 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'
         }
-      }),
-      finalize(() => {})
-    );
+      });
+      return next.handle(newRequest);
+    } else {
+      const newReq = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      return next.handle(newReq).pipe(
+        tap({
+          next: (_e) => {},
+          error: (err) => {
+            if (err.status === 403) {
+              console.log('asdfdfg');
+
+              this.authService.refreshAccessToken().subscribe(
+                (res: any) => {
+                  const refresh = this.authService.getRefreshToken();
+                  const access = res.access;
+
+                  this.authService
+                    .setTokens({ access, refresh }, null)
+                    .then((_res) => {
+                      // * Refresh page after token refreshed
+                      const currentUrl = this.router.url;
+                      this.router
+                        .navigateByUrl('/', {
+                          skipLocationChange: true
+                        })
+                        .then(() => {
+                          this.router.navigate([currentUrl]);
+                        });
+                    });
+                },
+                (_err) => {
+                  this.authService.logout();
+                  this.router
+                    .navigateByUrl('/', {
+                      skipLocationChange: true
+                    })
+                    .then(() => {
+                      this.router.navigate(['/auth/login']);
+                    });
+                }
+              );
+            }
+          }
+        }),
+        finalize(() => {})
+      );
+    }
   }
 }
