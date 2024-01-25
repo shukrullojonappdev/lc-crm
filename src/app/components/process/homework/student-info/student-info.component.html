@@ -16,20 +16,22 @@
           <p-button icon="pi pi-save" class="mr-2"></p-button>
         </div>
       </p-toolbar>
-      <div class="flex">
-        <p-tree
-          class="w-full md:w-20rem"
-          [value]="treeValue"
-          selectionMode="single"
-          (onNodeExpand)="getNodeItems($event)"
-          (onNodeSelect)="selectNode($event)"
-        ></p-tree>
-        <pre style="margin: -17px 0 0 1rem; width: 100%">
-          <p-editor class="w-full" [(ngModel)]="text" [modules]="{syntax: true, toolbar: [['code-block']]}">
-            <p-header> filetype </p-header>
-          </p-editor>
-        </pre>
-      </div>
+      <p-splitter [panelSizes]="[25, 75]" styleClass="mb-5">
+        <ng-template pTemplate>
+          <p-tree
+            class="w-full"
+            [value]="treeValue"
+            selectionMode="single"
+            (onNodeExpand)="getNodeItems($event)"
+            (onNodeSelect)="selectNode($event)"
+          ></p-tree>
+        </ng-template>
+        <ng-template pTemplate>
+          <pre style="margin: -17px 0 0 0; width: 100%">
+            <code class="border-1 surface-border border-round" [highlight]="text" [languages]="['json', 'ts', 'html', 'css']"></code>
+          </pre>
+        </ng-template>
+      </p-splitter>
     </div>
   </div>
 </div>

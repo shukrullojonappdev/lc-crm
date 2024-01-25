@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterRenderPhase,
+  Component,
+  OnInit,
+  ViewChild,
+  afterNextRender
+} from '@angular/core';
 import { BreadcrumpService } from '../shared/breadcrump.service';
-import { ActivatedRoute } from '@angular/router';
 import { RepoService, Tree } from '../shared/repo.service';
 
 @Component({
@@ -13,6 +18,22 @@ export class StudentInfoComponent implements OnInit {
   items: any[] = [];
   sidebarVisible = true;
   text = '';
+  options = {
+    debug: 'info',
+    modules: {
+      toolbar: '#toolbar'
+    },
+    placeholder: 'Compose an epic...',
+    readOnly: true,
+    theme: 'snow'
+  };
+
+  modules: {
+    formula: false;
+    toolbar: [['blockquote', 'code-block']];
+    syntax: true;
+  };
+  formats: ['code-block', 'code'];
 
   data = {
     user: 'shukrullojondevnu',
@@ -112,13 +133,14 @@ export class StudentInfoComponent implements OnInit {
         this.repoService
           .getBlob({ ...this.data, sha: e.node.data })
           .subscribe((res: any) => {
-            console.log(res);
             const tempText = atob(res.content);
-            console.log(tempText);
-
             this.text = tempText;
           });
       }
     }
+  }
+
+  log(e: any) {
+    console.log(e);
   }
 }

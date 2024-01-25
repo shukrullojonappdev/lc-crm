@@ -7,12 +7,13 @@ import { PrimeModule } from '../shared/prime.module';
 import { BreadcrumpService } from '../shared/breadcrump.service';
 import { HttpClientModule } from '@angular/common/http';
 
+import { HighlightModule } from 'ngx-highlightjs';
 import { SidebarModule } from 'primeng/sidebar';
 import { TreeModule } from 'primeng/tree';
-import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenubarModule } from 'primeng/menubar';
 import { FormsModule } from '@angular/forms';
+import { SplitterModule } from 'primeng/splitter';
 
 @NgModule({
   declarations: [StudentInfoComponent],
@@ -23,10 +24,11 @@ import { FormsModule } from '@angular/forms';
     PrimeModule,
     TreeModule,
     SidebarModule,
-    EditorModule,
     MenubarModule,
     InputTextModule,
-    HttpClientModule
+    HttpClientModule,
+    HighlightModule,
+    SplitterModule
   ],
   providers: [BreadcrumpService]
 })
