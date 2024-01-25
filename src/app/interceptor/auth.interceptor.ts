@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
       const newRequest = request.clone({
         headers: newHeaders,
         setHeaders: {
-          Authorization: 'Bearer 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'
+          Authorization: 'Bearer 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'
         }
       });
       return next.handle(newRequest);
@@ -40,8 +40,6 @@ export class AuthInterceptor implements HttpInterceptor {
           next: (_e) => {},
           error: (err) => {
             if (err.status === 403) {
-              console.log('asdfdfg');
-
               this.authService.refreshAccessToken().subscribe(
                 (res: any) => {
                   const refresh = this.authService.getRefreshToken();

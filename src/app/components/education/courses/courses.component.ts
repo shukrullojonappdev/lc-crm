@@ -19,6 +19,7 @@ export class CoursesComponent {
   selectedCourses: Course[] = [];
   courses: Course[] = [];
   loading = true;
+  cols: any[] = [];
 
   // * Paginator values
   page: number = 1;
@@ -43,6 +44,10 @@ export class CoursesComponent {
 
   ngOnInit() {
     this.getCourses(this.page);
+    this.cols = [
+      { field: 'id', header: 'ID' },
+      { field: 'title', header: 'Title' }
+    ];
   }
 
   getCourses(page: number) {
