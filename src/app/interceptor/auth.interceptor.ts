@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
       const newRequest = request.clone({
         headers: newHeaders,
         setHeaders: {
-          Authorization: 'Bearer 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'
+          // Authorization: 'Bearer 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'
         }
       });
       return next.handle(newRequest);
