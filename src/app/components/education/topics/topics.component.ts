@@ -24,15 +24,18 @@ export class TopicsComponent {
   cols: any[] = [];
 
   // * Dropdown values
+
   // * Course
-  courses: Course[] = [];
-  coursesTotal = 0;
-  coursesPage = 1;
-  options: ScrollerOptions = {
+  courses: Course[];
+  coursesPage: number;
+  coursesLoading: boolean;
+  coursesVScroll: any[];
+  coursesVScrollLoads: number;
+  coursesOptions: ScrollerOptions = {
     delay: 250,
     showLoader: true,
     lazy: true,
-    onLazyLoad: this.onLazyLoad.bind(this)
+    onLazyLoad: this.onCoursesLazyLoad.bind(this)
   };
 
   // * Paginator values
@@ -41,7 +44,7 @@ export class TopicsComponent {
 
   newTopicForm = this.fb.group({
     title: ['', Validators.required],
-    course: ['', Validators.required],
+    course: [' ', Validators.required],
     descriptions: ['']
   });
 
@@ -66,43 +69,51 @@ export class TopicsComponent {
       { field: 'title', header: 'Title' },
       { field: 'course', header: 'Course' }
     ];
+  }
 
-    // * Getting dropdown values
-    this.coursesService.getCourses(1).subscribe((res) => {
-      for (let i = 0; i < res.count; i++) {
-        this.courses.push({
-          id: '',
-          title: '',
-          descriptions: ''
+  onCoursesLazyLoad(e: any) {
+    const { first, last } = e;
+    if (!this.coursesLoading) this.coursesVScrollLoads++;
+    if (this.coursesVScrollLoads === this.coursesPage) {
+      this.getCourses(this.coursesPage);
+    }
+
+    const items = [...this.coursesVScroll];
+    for (let i = first; i < last; i++) {
+      items[i] = { ...this.courses[i] };
+    }
+    this.coursesVScroll = items;
+  }
+
+  async getCourses(page: number) {
+    this.coursesLoading = true;
+    this.coursesService.getCourses(page).subscribe((res) => {
+      if (this.coursesVScroll.length === 0) {
+        const tempEmptyArr = [];
+        for (let i = 0; i < res.count; i++) {
+          tempEmptyArr.push({
+            id: '',
+            title: 'empty',
+            descriptions: ''
+          });
+        }
+        this.coursesVScroll = tempEmptyArr;
+      }
+
+      if (this.courses.length !== res.count) {
+        const tempCourses = [...this.courses];
+        res.results.forEach((e: any, i: number) => {
+          tempCourses[(this.coursesPage - 1) * 10 + i] = e;
         });
+
+        this.courses = tempCourses;
+      }
+
+      if (this.coursesPage * 10 < res.count) {
+        this.coursesPage++;
       }
     });
-  }
-
-  onLazyLoad(e: any) {
-    this.log(e);
-    const { first, last } = e;
-    if (first === 0 && this.coursesPage === 1) {
-      this.getCourses(this.coursesPage);
-    }
-    if (first % 10 === 2 && last % 10 === 0) {
-      this.getCourses(this.coursesPage);
-      console.log(this.courses);
-    }
-  }
-
-  log(e: any) {
-    console.log(e);
-  }
-
-  getCourses(page: number) {
-    this.coursesService.getCourses(page).subscribe((res) => {
-      const start = (page - 1) * 10;
-      res.results.forEach((e, i) => {
-        this.courses[i + start] = e;
-      });
-      this.coursesPage++;
-    });
+    this.coursesLoading = false;
   }
 
   getTopics(page: number) {
@@ -122,11 +133,21 @@ export class TopicsComponent {
   // Open dialog functions
   openNewTopicDialog() {
     this.newTopicDialog = true;
+    this.courses = [];
+    this.coursesVScroll = [];
+    this.coursesPage = 1;
+    this.coursesVScrollLoads = 1;
+    this.getCourses(this.coursesPage);
   }
 
   openEditTopicDialog(topic: Topic) {
     this.editTopicDialog = true;
-    this.editTopicForm.setValue(topic as any);
+    this.courses = [];
+    this.coursesVScroll = [];
+    this.coursesPage = 1;
+    this.coursesVScrollLoads = 1;
+    this.getCourses(this.coursesPage);
+    this.editTopicForm.patchValue(topic as any);
   }
 
   openDeleteTopicDialog(topic: Topic) {

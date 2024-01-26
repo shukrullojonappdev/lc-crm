@@ -147,14 +147,13 @@
             <label for="title" i18n>Course</label>
             <p-dropdown
               formControlName="course"
-              [options]="courses"
+              [options]="coursesVScroll"
+              optionValue="id"
               optionLabel="title"
-              placeholder="Select a course"
-              i18n-placeholder
               appendTo="body"
               [virtualScroll]="true"
               [virtualScrollItemSize]="38"
-              [virtualScrollOptions]="options"
+              [virtualScrollOptions]="coursesOptions"
             ></p-dropdown>
           </div>
           <div class="field">
@@ -203,6 +202,20 @@
           <div class="field">
             <label for="name">Title</label>
             <input type="text" pInputText id="name" formControlName="title" />
+          </div>
+          <div class="field">
+            <label for="title" i18n>Course</label>
+            <p-dropdown
+              formControlName="course"
+              [options]="coursesVScroll"
+              optionValue="id"
+              optionLabel="title"
+              [placeholder]="editTopicForm.controls['course'].value"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="coursesOptions"
+            ></p-dropdown>
           </div>
           <div class="field">
             <label for="description">Description</label>
