@@ -29,12 +29,12 @@ export class AppMenuComponent implements OnInit {
           {
             label: $localize`Workers`,
             icon: 'pi pi-fw pi-id-card',
-            routerLink: ['/pages/workers']
+            routerLink: ['/people/workers']
           },
           {
             label: $localize`Students`,
             icon: 'pi pi-fw pi-user',
-            routerLink: ['/pages/students']
+            routerLink: ['/people/students']
           }
         ]
       },
@@ -64,12 +64,12 @@ export class AppMenuComponent implements OnInit {
           {
             label: $localize`Departments`,
             icon: 'pi pi-fw pi-building',
-            routerLink: ['/pages/departments']
+            routerLink: ['/places/departments']
           },
           {
             label: $localize`Rooms`,
             icon: 'pi pi-fw pi-box',
-            routerLink: ['/pages/rooms']
+            routerLink: ['/places/rooms']
           }
         ]
       },

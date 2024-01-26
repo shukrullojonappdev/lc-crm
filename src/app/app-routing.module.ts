@@ -21,7 +21,7 @@ import { authGuard } from './guard/auth.guard';
                 )
             },
             {
-              path: 'poeple',
+              path: 'people',
               loadChildren: () =>
                 import('./components/people/people.module').then(
                   (m) => m.PeopleModule
@@ -32,6 +32,13 @@ import { authGuard } from './guard/auth.guard';
               loadChildren: () =>
                 import('./components/education/education.module').then(
                   (m) => m.EducationModule
+                )
+            },
+            {
+              path: 'places',
+              loadChildren: () =>
+                import('./components/places/places.module').then(
+                  (m) => m.PlacesModule
                 )
             },
             {
