@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CoursesRoutingModule } from './courses-routing.module';
+import { CoursesComponent } from './courses.component';
+
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +17,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
-import { CoursesComponent } from './courses.component';
 import { MessageService } from 'primeng/api';
 import { PaginatorModule } from 'primeng/paginator';
 
@@ -24,9 +24,9 @@ import { PaginatorModule } from 'primeng/paginator';
   declarations: [CoursesComponent],
   imports: [
     CommonModule,
+    CoursesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CoursesRoutingModule,
     TableModule,
     FileUploadModule,
     ButtonModule,

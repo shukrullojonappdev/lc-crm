@@ -81,7 +81,6 @@ export class CoursesComponent {
 
   openDeleteCoursesDialog() {
     this.deleteCoursesDialog = true;
-    console.log(this.selectedCourses);
   }
 
   // Close dialog functions
