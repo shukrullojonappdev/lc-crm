@@ -1,1 +1,320 @@
-<p>departments works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              (click)="openNewDepartmentDialog()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="Delete"
+              icon="pi pi-trash"
+              class="p-button-danger"
+              (click)="openDeleteDepartmentsDialog()"
+              [disabled]="!selectedDepartments || !selectedDepartments.length"
+            ></button>
+          </div>
+        </ng-template>
+
+        <!-- <ng-template pTemplate="right">
+          <p-fileUpload
+            mode="basic"
+            accept="image/*"
+            [maxFileSize]="1000000"
+            label="Import"
+            chooseLabel="Import"
+            class="mr-2 inline-block"
+          ></p-fileUpload>
+          <button
+            pButton
+            pRipple
+            label="Export"
+            icon="pi pi-upload"
+            class="p-button-help"
+            (click)="dt.exportCSV()"
+          ></button>
+        </ng-template> -->
+      </p-toolbar>
+
+      <p-table
+        #dt
+        [value]="departments"
+        dataKey="id"
+        [(selection)]="selectedDepartments"
+        selectionMode="multiple"
+        [rowHover]="true"
+        [rows]="10"
+        [columns]="cols"
+        [loading]="loading"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+          >
+            <h5 class="m-0">Manage departments</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter(dt, $event)"
+                placeholder="Search..."
+                i18n-placeholder
+                class="w-full sm:w-auto"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="title" i18n>
+              Title <p-sortIcon field="title"></p-sortIcon>
+            </th>
+            <th pSortableColumn="is_active" i18n>
+              Is active <p-sortIcon field="is_active"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-department>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="department"></p-tableCheckbox>
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              {{ department.code || department.id }}
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              {{ department.title }}
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              <p-button
+                *ngIf="department.is_active; else falseBtn"
+                size="small"
+                [disabled]="true"
+                [rounded]="true"
+                icon="pi pi-check"
+              ></p-button>
+              <ng-template #falseBtn>
+                <p-button
+                  [disabled]="true"
+                  [rounded]="true"
+                  severity="warning"
+                  icon="pi pi-times"
+                ></p-button>
+              </ng-template>
+            </td>
+            <td>
+              <div class="flex justify-content-end">
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-success mr-2"
+                  (click)="openEditDepartmentDialog(department)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-warning"
+                  (click)="openDeleteDepartmentDialog(department)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator
+        [totalRecords]="totalRecords"
+        [rows]="10"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
+    </div>
+
+    <!-- * Create element dialog -->
+    <p-dialog
+      [(visible)]="newDepartmentDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="New department"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="newDepartmentForm" (submit)="createNewDepartment()">
+          <div class="field">
+            <label for="title" i18n>Title</label>
+            <input type="text" pInputText id="title" formControlName="title" />
+          </div>
+          <div class="field flex align-items-center">
+            <p-inputSwitch formControlName="is_active"></p-inputSwitch>
+            <label class="ml-3" i18n>Is active</label>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Descriptions</label>
+            <textarea
+              id="descriptions"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideNewDepartmentDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="createNewDepartment()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- *  Edit element dialog -->
+    <p-dialog
+      [(visible)]="editDepartmentDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="Edit department"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="editDepartmentForm">
+          <div class="field">
+            <label for="name">Title</label>
+            <input type="text" pInputText id="name" formControlName="title" />
+          </div>
+          <div class="field flex align-items-center">
+            <p-inputSwitch formControlName="is_active"></p-inputSwitch>
+            <label class="ml-3" i18n>Is active</label>
+          </div>
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideEditDepartmentDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="updateDepartment()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete element dialog -->
+    <p-dialog
+      [(visible)]="deleteDepartmentDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="selectedDepartment"
+          >Are you sure you want to delete <b>{{ selectedDepartment.title }}</b
+          >?</span
+        >
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteDepartmentDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          (click)="deleteDepartment()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete selected elements dialog   -->
+    <p-dialog
+      [(visible)]="deleteDepartmentsDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected products?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteDepartmentsDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          [loading]="selectedDepartments.length === 0"
+          (click)="deleteDepartments()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
