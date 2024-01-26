@@ -1,1 +1,306 @@
-<p>topics works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              (click)="openNewTopicDialog()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="Delete"
+              icon="pi pi-trash"
+              class="p-button-danger"
+              (click)="openDeleteTopicsDialog()"
+              [disabled]="!selectedTopics || !selectedTopics.length"
+            ></button>
+          </div>
+        </ng-template>
+
+        <!-- <ng-template pTemplate="right">
+          <p-fileUpload
+            mode="basic"
+            accept="image/*"
+            [maxFileSize]="1000000"
+            label="Import"
+            chooseLabel="Import"
+            class="mr-2 inline-block"
+          ></p-fileUpload>
+          <button
+            pButton
+            pRipple
+            label="Export"
+            icon="pi pi-upload"
+            class="p-button-help"
+            (click)="dt.exportCSV()"
+          ></button>
+        </ng-template> -->
+      </p-toolbar>
+
+      <p-table
+        #dt
+        [value]="topics"
+        dataKey="id"
+        [(selection)]="selectedTopics"
+        selectionMode="multiple"
+        [rowHover]="true"
+        [rows]="10"
+        [columns]="cols"
+        [loading]="loading"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+          >
+            <h5 class="m-0">Manage Topics</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter(dt, $event)"
+                placeholder="Search..."
+                i18n-placeholder
+                class="w-full sm:w-auto"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="title" i18n>
+              Title <p-sortIcon field="title"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-topic>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="topic"></p-tableCheckbox>
+            </td>
+            <td style="width: 33%; min-width: 10rem">
+              {{ topic.code || topic.id }}
+            </td>
+            <td style="width: 33%; min-width: 10rem">
+              {{ topic.title }}
+            </td>
+            <td>
+              <div class="flex justify-content-end">
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-success mr-2"
+                  (click)="openEditTopicDialog(topic)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-warning"
+                  (click)="openDeleteTopicDialog(topic)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator
+        [totalRecords]="totalRecords"
+        [rows]="10"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
+    </div>
+
+    <!-- * Create element dialog -->
+    <p-dialog
+      [(visible)]="newTopicDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="New Topic"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="newTopicForm" (submit)="createNewTopic()">
+          <div class="field">
+            <label for="title" i18n>Title</label>
+            <input type="text" pInputText id="title" formControlName="title" />
+          </div>
+          <div class="field">
+            <label for="title" i18n>Course</label>
+            <p-dropdown
+              formControlName="course"
+              [options]="courses"
+              optionLabel="title"
+              placeholder="Select a course"
+              i18n-placeholder
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="options"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Descriptions</label>
+            <textarea
+              id="descriptions"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideNewTopicDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="createNewTopic()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- *  Edit element dialog -->
+    <p-dialog
+      [(visible)]="editTopicDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="Edit Topic"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="editTopicForm">
+          <div class="field">
+            <label for="name">Title</label>
+            <input type="text" pInputText id="name" formControlName="title" />
+          </div>
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideEditTopicDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="updateTopic()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete element dialog -->
+    <p-dialog
+      [(visible)]="deleteTopicDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="selectedTopic"
+          >Are you sure you want to delete <b>{{ selectedTopic.title }}</b
+          >?</span
+        >
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteTopicDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          (click)="deleteTopic()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete selected elements dialog   -->
+    <p-dialog
+      [(visible)]="deleteTopicsDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected products?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteTopicsDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          [loading]="selectedTopics.length === 0"
+          (click)="deleteTopics()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

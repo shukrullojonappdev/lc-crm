@@ -81,7 +81,6 @@ export class GroupsComponent {
 
   openDeleteGroupsDialog() {
     this.deleteGroupsDialog = true;
-    console.log(this.selectedGroups);
   }
 
   // Close dialog functions
@@ -115,7 +114,7 @@ export class GroupsComponent {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'New Group created'
+            detail: 'New group created'
           });
           this.getGroups(this.page);
         });

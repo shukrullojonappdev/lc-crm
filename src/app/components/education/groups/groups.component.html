@@ -90,16 +90,16 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-Group>
+        <ng-template pTemplate="body" let-group>
           <tr>
             <td>
-              <p-tableCheckbox [value]="Group"></p-tableCheckbox>
+              <p-tableCheckbox [value]="group"></p-tableCheckbox>
             </td>
             <td style="width: 33%; min-width: 10rem">
-              {{ Group.code || Group.id }}
+              {{ group.code || group.id }}
             </td>
             <td style="width: 33%; min-width: 10rem">
-              {{ Group.title }}
+              {{ group.title }}
             </td>
             <td>
               <div class="flex justify-content-end">
@@ -108,14 +108,14 @@
                   pRipple
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
-                  (click)="openEditGroupDialog(Group)"
+                  (click)="openEditGroupDialog(group)"
                 ></button>
                 <button
                   pButton
                   pRipple
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning"
-                  (click)="openDeleteGroupDialog(Group)"
+                  (click)="openDeleteGroupDialog(group)"
                 ></button>
               </div>
             </td>
@@ -133,7 +133,7 @@
     <p-dialog
       [(visible)]="newGroupDialog"
       [style]="{ width: '450px', margin: '0 10px' }"
-      header="New Group"
+      header="New group"
       [modal]="true"
       class="p-fluid"
     >
@@ -180,7 +180,7 @@
     <p-dialog
       [(visible)]="editGroupDialog"
       [style]="{ width: '450px', margin: '0 10px' }"
-      header="Edit Group"
+      header="Edit group"
       [modal]="true"
       class="p-fluid"
     >
