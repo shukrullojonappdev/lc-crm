@@ -11,6 +11,17 @@
         }
       },
       "root": "",
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "ru": {
+            "translation": "src/locale/ru.json"
+          },
+          "uz": {
+            "translation": "src/locale/uz.json"
+          }
+        }
+      },
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
@@ -42,6 +53,7 @@
           },
           "configurations": {
             "production": {
+              "localize": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -84,8 +96,8 @@
           "options": {
             "format": "json",
             "buildTarget": "sakai-ng:build",
-            "outputPath": "src/app/locale",
-            "outFile": "enlish.json"
+            "outputPath": "src/locale",
+            "outFile": "en.json"
           }
         },
         "test": {

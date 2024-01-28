@@ -5,3 +5,7 @@
 :host ::ng-deep .p-toolbar {
   margin: 1rem 0;
 }
+
+:host ::ng-deep .p-splitter {
+  border: 0 !important;
+}

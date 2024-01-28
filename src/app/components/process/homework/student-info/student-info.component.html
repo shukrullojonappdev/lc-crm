@@ -16,7 +16,7 @@
           <p-button icon="pi pi-save" class="mr-2"></p-button>
         </div>
       </p-toolbar>
-      <p-splitter [panelSizes]="[25, 75]" styleClass="mb-5">
+      <p-splitter [panelSizes]="[25, 75]">
         <ng-template pTemplate>
           <p-tree
             class="w-full"
@@ -27,8 +27,8 @@
           ></p-tree>
         </ng-template>
         <ng-template pTemplate>
-          <pre style="margin: -17px 0 0 0; width: 100%">
-            <code class="border-1 surface-border border-round" [highlight]="text" [languages]="['json', 'ts', 'html', 'css']"></code>
+          <pre style="margin: -19px 0 0 0; width: 100%">
+            <code class="border-1 surface-border border-round h-full" [highlight]="text" [languages]="['json', 'ts', 'html', 'css']"></code>
           </pre>
         </ng-template>
       </p-splitter>

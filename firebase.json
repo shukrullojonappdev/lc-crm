@@ -1,12 +1,23 @@
 {
   "hosting": {
-    "public": "dist/sakai-ngnpm",
+    "public": "dist/sakai-ng",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/en/**",
+        "destination": "/en/index.html"
+      },
+      {
+        "source": "/ru/**",
+        "destination": "/ru/index.html"
+      },
+      {
+        "source": "/uz/**",
+        "destination": "/uz/index.html"
       }
-    ]
+    ],
+    "i18n": {
+      "root": "/"
+    }
   }
 }
