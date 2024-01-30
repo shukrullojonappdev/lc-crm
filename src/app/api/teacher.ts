@@ -4,8 +4,8 @@ import { User } from './user';
 
 export interface Teacher {
   id: string | null;
-  department: string | Department;
   user: string | User;
+  department: string | Department;
   course: string | Course;
   descriptions: string;
 }

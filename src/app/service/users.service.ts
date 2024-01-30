@@ -9,6 +9,6 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getUsers() {
-    return this.http.get(`${environment.apiUrl}/api/userApi/`);
+    return this.http.get(`${environment.apiUrl}/api/userApi`);
   }
 }

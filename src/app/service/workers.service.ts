@@ -9,31 +9,33 @@ import { Worker } from '../api/worker';
 export class WorkersService {
   constructor(private http: HttpClient) {}
 
-  getCourses(page: number | 1) {
-    return this.http.get<{
-      count: number;
-      next: string;
-      previous: string;
-      results: Worker[];
-    }>(`${environment.apiUrl}/api/worker?page=${page}`);
+  getWorkers(search: string, ordering: string) {
+    return this.http.get(
+      `${environment.apiUrl}/api/workerApi/?${
+        search ? 'search=' + search + '&' : ''
+      }${ordering ? 'ordering=' + ordering : ''}`
+    );
   }
 
-  getCourse(id: string) {
-    return this.http.get<Worker>(`${environment.apiUrl}/api/worker/${id}`);
+  getWorker(id: string) {
+    return this.http.get<Worker>(`${environment.apiUrl}/api/workerApi/${id}`);
   }
 
-  createCourse(worker: Worker) {
-    return this.http.post<Worker>(`${environment.apiUrl}/api/worker/`, worker);
-  }
-
-  updateCourse(worker: Worker) {
-    return this.http.put<Worker>(
-      `${environment.apiUrl}/api/worker/${worker.id}/`,
+  createWorker(worker: Worker) {
+    return this.http.post<Worker>(
+      `${environment.apiUrl}/api/workerApi/`,
       worker
     );
   }
 
-  deleteCourse(id: string) {
-    return this.http.delete(`${environment.apiUrl}/api/worker/${id}`);
+  updateWorker(worker: Worker) {
+    return this.http.put<Worker>(
+      `${environment.apiUrl}/api/workerApi/${worker.id}/`,
+      worker
+    );
+  }
+
+  deleteWorker(id: string) {
+    return this.http.delete(`${environment.apiUrl}/api/workerApi/${id}`);
   }
 }

@@ -26,6 +26,7 @@ import { PaginatorModule } from 'primeng/paginator';
   imports: [
     CommonModule,
     StudentsRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     TableModule,
     FileUploadModule,

@@ -12,13 +12,13 @@ import { UsersService } from 'src/app/service/users.service';
   styleUrl: './students.component.scss'
 })
 export class StudentsComponent {
-  newTopicDialog: boolean = false;
-  editTopicDialog: boolean = false;
-  deleteTopicDialog: boolean = false;
-  deleteTopicsDialog: boolean = false;
-  selectedTopic: Student | null = null;
-  selectedTopics: Student[] = [];
-  topics: Student[] = [];
+  newStudentDialog: boolean = false;
+  editStudentDialog: boolean = false;
+  deleteStudentDialog: boolean = false;
+  deleteStudentsDialog: boolean = false;
+  selectedStudent: Student | null = null;
+  selectedStudents: Student[] = [];
+  students: Student[] = [];
   loading = true;
   cols: any[] = [];
 
@@ -26,31 +26,22 @@ export class StudentsComponent {
 
   // * User
   users: User[];
-  coursesPage: number;
-  coursesLoading: boolean;
-  coursesVScroll: any[];
-  coursesVScrollLoads: number;
-  coursesOptions: ScrollerOptions = {
-    delay: 250,
-    showLoader: true,
-    lazy: true,
-    onLazyLoad: this.onCoursesLazyLoad.bind(this)
-  };
+  usersLoading: boolean;
 
   // * Paginator values
   page: number = 1;
   totalRecords = 0;
 
-  newTopicForm = this.fb.group({
+  newStudentForm = this.fb.group({
     title: ['', Validators.required],
-    course: [' ', Validators.required],
+    Student: [' ', Validators.required],
     descriptions: ['']
   });
 
-  editTopicForm = this.fb.group({
+  editStudentForm = this.fb.group({
     id: ['', Validators.required],
     title: ['', Validators.required],
-    course: ['', Validators.required],
+    Student: ['', Validators.required],
     descriptions: ['']
   });
 
@@ -62,185 +53,143 @@ export class StudentsComponent {
   ) {}
 
   ngOnInit() {
-    this.getTopics(this.page);
+    this.getStudents(this.page);
     this.cols = [
       { field: 'id', header: 'ID' },
       { field: 'title', header: 'Title' },
-      { field: 'course', header: 'User' }
+      { field: 'Student', header: 'User' }
     ];
   }
 
-  onCoursesLazyLoad(e: any) {
-    const { first, last } = e;
-    if (!this.coursesLoading) this.coursesVScrollLoads++;
-    if (this.coursesVScrollLoads === this.coursesPage) {
-      this.getCourses(this.coursesPage);
-    }
-
-    const items = [...this.coursesVScroll];
-    for (let i = first; i < last; i++) {
-      items[i] = { ...this.users[i] };
-    }
-    this.coursesVScroll = items;
-  }
-
-  async getCourses(page: number) {
-    this.coursesLoading = true;
-    this.usersService.getCourses(page).subscribe((res) => {
-      if (this.coursesVScroll.length === 0) {
-        const tempEmptyArr = [];
-        for (let i = 0; i < res.count; i++) {
-          tempEmptyArr.push({
-            id: '',
-            title: 'empty',
-            descriptions: ''
-          });
-        }
-        this.coursesVScroll = tempEmptyArr;
-      }
-
-      if (this.users.length !== res.count) {
-        const tempCourses = [...this.users];
-        res.results.forEach((e: any, i: number) => {
-          tempCourses[(this.coursesPage - 1) * 10 + i] = e;
-        });
-
-        this.users = tempCourses;
-      }
-
-      if (this.coursesPage * 10 < res.count) {
-        this.coursesPage++;
-      }
+  getUsers() {
+    this.users = [];
+    this.usersLoading = true;
+    this.usersService.getUsers().subscribe((res: any) => {
+      this.users = res;
     });
-    this.coursesLoading = false;
+    this.usersLoading = false;
   }
 
-  getTopics(page: number) {
-    this.studentsService.getTopics(page).subscribe((res: any) => {
+  getStudents(page: number) {
+    this.studentsService.getStudents(page).subscribe((res: any) => {
       this.totalRecords = res.count;
-      this.topics = res.results;
+      this.students = res.results;
       this.loading = false;
     });
   }
 
   onPageChange(e: any) {
     this.loading = true;
-    this.getTopics(e.page + 1);
-    this.selectedTopics = [];
+    this.getStudents(e.page + 1);
+    this.selectedStudents = [];
   }
 
   // Open dialog functions
-  openNewTopicDialog() {
-    this.newTopicDialog = true;
-    this.users = [];
-    this.coursesVScroll = [];
-    this.coursesPage = 1;
-    this.coursesVScrollLoads = 1;
-    this.getCourses(this.coursesPage);
+  openNewStudentDialog() {
+    this.newStudentDialog = true;
+    this.getUsers();
   }
 
-  openEditTopicDialog(topic: Student) {
-    this.editTopicDialog = true;
-    this.users = [];
-    this.coursesVScroll = [];
-    this.coursesPage = 1;
-    this.coursesVScrollLoads = 1;
-    this.getCourses(this.coursesPage);
-    this.editTopicForm.patchValue(topic as any);
+  openEditStudentDialog(Student: Student) {
+    this.editStudentDialog = true;
+    this.getUsers();
+    this.editStudentForm.patchValue(Student as any);
   }
 
-  openDeleteTopicDialog(topic: Student) {
-    this.deleteTopicDialog = true;
-    this.selectedTopic = topic;
+  openDeleteStudentDialog(Student: Student) {
+    this.deleteStudentDialog = true;
+    this.selectedStudent = Student;
   }
 
-  openDeleteTopicsDialog() {
-    this.deleteTopicsDialog = true;
+  openDeleteStudentsDialog() {
+    this.deleteStudentsDialog = true;
   }
 
   // Close dialog functions
-  hideNewTopicDialog() {
-    this.newTopicDialog = false;
-    this.newTopicForm.reset();
+  hideNewStudentDialog() {
+    this.newStudentDialog = false;
+    this.newStudentForm.reset();
   }
 
-  hideEditTopicDialog() {
-    this.editTopicDialog = false;
-    this.editTopicForm.reset();
+  hideEditStudentDialog() {
+    this.editStudentDialog = false;
+    this.editStudentForm.reset();
   }
 
-  hideDeleteTopicDialog() {
-    this.deleteTopicDialog = false;
-    this.selectedTopic = null;
+  hideDeleteStudentDialog() {
+    this.deleteStudentDialog = false;
+    this.selectedStudent = null;
   }
 
-  hideDeleteTopicsDialog() {
-    this.deleteTopicsDialog = false;
+  hideDeleteStudentsDialog() {
+    this.deleteStudentsDialog = false;
   }
 
   // Dialog actions
-  createNewTopic() {
-    if (this.newTopicForm.valid) {
+  createNewStudent() {
+    if (this.newStudentForm.valid) {
       this.studentsService
-        .createTopic(this.newTopicForm.value as Student)
+        .createStudent(this.newStudentForm.value as Student)
         .subscribe(() => {
-          this.newTopicForm.reset();
-          this.newTopicDialog = false;
+          this.newStudentForm.reset();
+          this.newStudentDialog = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'New Student created'
           });
-          this.getTopics(this.page);
+          this.getStudents(this.page);
         });
     }
   }
 
-  deleteTopic() {
-    if (this.selectedTopic.id) {
-      this.studentsService.deleteTopic(this.selectedTopic.id).subscribe(() => {
-        this.deleteTopicDialog = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Student deleted'
-        });
-        this.getTopics(this.page);
-      });
-    }
-  }
-
-  updateTopic() {
-    if (this.editTopicForm.valid) {
+  deleteStudent() {
+    if (this.selectedStudent.id) {
       this.studentsService
-        .updateTopic(this.editTopicForm.value as Student)
+        .deleteStudent(this.selectedStudent.id)
         .subscribe(() => {
-          this.editTopicForm.reset();
-          this.editTopicDialog = false;
+          this.deleteStudentDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Student deleted'
+          });
+          this.getStudents(this.page);
+        });
+    }
+  }
+
+  updateStudent() {
+    if (this.editStudentForm.valid) {
+      this.studentsService
+        .updateStudent(this.editStudentForm.value as Student)
+        .subscribe(() => {
+          this.editStudentForm.reset();
+          this.editStudentDialog = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Student updated'
           });
-          this.getTopics(this.page);
+          this.getStudents(this.page);
         });
     }
   }
 
-  deleteTopics() {
-    this.selectedTopics.forEach((e, index) => {
+  deleteStudents() {
+    this.selectedStudents.forEach((e, index) => {
       if (e.id) {
-        this.studentsService.deleteTopic(e.id).subscribe(() => {
+        this.studentsService.deleteStudent(e.id).subscribe(() => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Student deleted'
           });
 
-          if (this.selectedTopics.length - 1 === index) {
-            this.deleteTopicsDialog = false;
-            this.getTopics(this.page);
-            this.selectedTopics = [];
+          if (this.selectedStudents.length - 1 === index) {
+            this.deleteStudentsDialog = false;
+            this.getStudents(this.page);
+            this.selectedStudents = [];
           }
         });
       }

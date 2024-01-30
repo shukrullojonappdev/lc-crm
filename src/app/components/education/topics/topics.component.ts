@@ -44,8 +44,8 @@ export class TopicsComponent {
 
   newTopicForm = this.fb.group({
     title: ['', Validators.required],
-    course: [' ', Validators.required],
-    descriptions: ['']
+    course: [' ', [Validators.required, Validators.pattern(/\d/)]],
+    descriptions: [' ']
   });
 
   editTopicForm = this.fb.group({
@@ -85,7 +85,7 @@ export class TopicsComponent {
     this.coursesVScroll = items;
   }
 
-  async getCourses(page: number) {
+  getCourses(page: number) {
     this.coursesLoading = true;
     this.coursesService.getCourses(page).subscribe((res) => {
       if (this.coursesVScroll.length === 0) {
@@ -93,7 +93,7 @@ export class TopicsComponent {
         for (let i = 0; i < res.count; i++) {
           tempEmptyArr.push({
             id: '',
-            title: 'empty',
+            title: '',
             descriptions: ''
           });
         }
