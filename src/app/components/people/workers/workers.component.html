@@ -1,1 +1,337 @@
-<p>workers works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              (click)="openNewWorkerDialog()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="Delete"
+              icon="pi pi-trash"
+              class="p-button-danger"
+              (click)="openDeleteWorkersDialog()"
+              [disabled]="!selectedWorkers || !selectedWorkers.length"
+            ></button>
+          </div>
+        </ng-template>
+
+        <!-- <ng-template pTemplate="right">
+          <p-fileUpload
+            mode="basic"
+            accept="image/*"
+            [maxFileSize]="1000000"
+            label="Import"
+            chooseLabel="Import"
+            class="mr-2 inline-block"
+          ></p-fileUpload>
+          <button
+            pButton
+            pRipple
+            label="Export"
+            icon="pi pi-upload"
+            class="p-button-help"
+            (click)="dt.exportCSV()"
+          ></button>
+        </ng-template> -->
+      </p-toolbar>
+
+      <p-table
+        #dt
+        [value]="workers"
+        dataKey="id"
+        [(selection)]="selectedWorkers"
+        selectionMode="multiple"
+        [rowHover]="true"
+        [rows]="10"
+        [columns]="cols"
+        [loading]="loading"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+          >
+            <h5 class="m-0">Manage Workers</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter(dt, $event)"
+                placeholder="Search..."
+                i18n-placeholder
+                class="w-full sm:w-auto"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="title" i18n>
+              Title <p-sortIcon field="title"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-worker>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="worker"></p-tableCheckbox>
+            </td>
+            <td style="width: 33%; min-width: 10rem">
+              {{ worker.code || worker.id }}
+            </td>
+            <td style="width: 33%; min-width: 10rem">
+              {{ worker.title }}
+            </td>
+            <td>
+              <div class="flex justify-content-end">
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-success mr-2"
+                  (click)="openEditWorkerDialog(worker)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-warning"
+                  (click)="openDeleteWorkerDialog(worker)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- * Create element dialog -->
+    <p-dialog
+      [(visible)]="newWorkerDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="New Worker"
+      [modal]="true"
+      [draggable]="false"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="newWorkerForm" (submit)="createNewWorker()">
+          <div class="field">
+            <label i18n>User</label>
+            <p-dropdown
+              id="md"
+              formControlName="user"
+              [options]="users"
+              optionValue="id"
+              optionLabel="full_name"
+              appendTo="body"
+            >
+              <ng-template let-user pTemplate="item">
+                <div [class]="[checkToRole(user) ? 'show' : 'hide']">
+                  {{ user.full_name || user.id }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="field">
+            <label i18n>Department</label>
+            <p-multiSelect
+              [options]="departmentsVScroll"
+              optionValue="id"
+              optionLabel="title"
+              formControlName="departments"
+              appendTo="body"
+              [showHeader]="false"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="departmentsOptions"
+            ></p-multiSelect>
+          </div>
+
+          <div class="field">
+            <label i18n>Course</label>
+            <p-multiSelect
+              formControlName="course"
+              [options]="coursesVScroll"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+              [showHeader]="false"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="coursesOptions"
+            ></p-multiSelect>
+          </div>
+          <div class="field">
+            <label i18n>Descriptions</label>
+            <textarea
+              id="descriptions"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideNewWorkerDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="createNewWorker()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- *  Edit element dialog -->
+    <p-dialog
+      [(visible)]="editWorkerDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="Edit worker"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="editWorkerForm">
+          <div class="field">
+            <label for="title" i18n>User</label>
+            <p-dropdown
+              formControlName="course"
+              [options]="users"
+              optionValue="id"
+              optionLabel="full_name"
+              [placeholder]="editWorkerForm.controls['course'].value"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideEditWorkerDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="updateWorker()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete element dialog -->
+    <p-dialog
+      [(visible)]="deleteWorkerDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="selectedWorker"
+          >Are you sure you want to delete <b>{{ selectedWorker.user }}</b
+          >?</span
+        >
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteWorkerDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          (click)="deleteWorker()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete selected elements dialog   -->
+    <p-dialog
+      [(visible)]="deleteWorkerDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected products?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteWorkerDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          [loading]="selectedWorkers.length === 0"
+          (click)="deleteWorkers()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
