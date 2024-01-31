@@ -18,7 +18,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { PaginatorModule } from 'primeng/paginator';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [GroupsComponent],
@@ -40,7 +42,9 @@ import { PaginatorModule } from 'primeng/paginator';
     RadioButtonModule,
     InputNumberModule,
     DialogModule,
-    PaginatorModule
+    PaginatorModule,
+    MultiSelectModule,
+    CalendarModule
   ],
   providers: [MessageService]
 })

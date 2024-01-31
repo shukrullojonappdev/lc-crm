@@ -87,6 +87,12 @@
             <th pSortableColumn="title" i18n>
               Title <p-sortIcon field="title"></p-sortIcon>
             </th>
+            <th pSortableColumn="start_date" i18n>
+              Start date <p-sortIcon field="start_date"></p-sortIcon>
+            </th>
+            <th pSortableColumn="end_date" i18n>
+              End date <p-sortIcon field="end_date"></p-sortIcon>
+            </th>
             <th></th>
           </tr>
         </ng-template>
@@ -95,11 +101,17 @@
             <td>
               <p-tableCheckbox [value]="group"></p-tableCheckbox>
             </td>
-            <td style="width: 33%; min-width: 10rem">
+            <td style="width: 20%; min-width: 10rem">
               {{ group.code || group.id }}
             </td>
-            <td style="width: 33%; min-width: 10rem">
+            <td style="width: 20%; min-width: 10rem">
               {{ group.title }}
+            </td>
+            <td style="width: 20%; min-width: 10rem">
+              {{ group.start_date }}
+            </td>
+            <td style="width: 20%; min-width: 10rem">
+              {{ group.end_date }}
             </td>
             <td>
               <div class="flex justify-content-end">
@@ -142,6 +154,61 @@
           <div class="field">
             <label for="title" i18n>Title</label>
             <input type="text" pInputText id="title" formControlName="title" />
+          </div>
+          <div class="field">
+            <label for="title" i18n>Course</label>
+            <p-dropdown
+              formControlName="course"
+              [options]="coursesVScroll"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="coursesOptions"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label i18n>Teacher</label>
+            <p-multiSelect
+              formControlName="teacher"
+              [options]="teachers"
+              optionValue="id"
+              optionLabel="id"
+              appendTo="body"
+              [showHeader]="false"
+            ></p-multiSelect>
+          </div>
+          <div class="field">
+            <label i18n>Timetable</label>
+            <p-dropdown
+              formControlName="table"
+              [options]="timetablesVScroll"
+              optionValue="id"
+              optionLabel="start_time"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="timetablesOptions"
+            >
+              <ng-template let-table pTemplate="item">
+                {{ table.start_time }} - {{ table.end_time }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Start date</label>
+            <p-calendar
+              appendTo="body"
+              (onSelect)="selectDateC($event, 'start_date')"
+            ></p-calendar>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>End date</label>
+            <p-calendar
+              appendTo="body"
+              (onSelect)="selectDateC($event, 'end_date')"
+            ></p-calendar>
           </div>
           <div class="field">
             <label for="descriptions" i18n>Descriptions</label>
@@ -187,13 +254,68 @@
       <ng-template pTemplate="content">
         <form [formGroup]="editGroupForm">
           <div class="field">
-            <label for="name">Title</label>
-            <input type="text" pInputText id="name" formControlName="title" />
+            <label for="title" i18n>Title</label>
+            <input type="text" pInputText id="title" formControlName="title" />
           </div>
           <div class="field">
-            <label for="description">Description</label>
+            <label for="title" i18n>Course</label>
+            <p-dropdown
+              formControlName="course"
+              [options]="coursesVScroll"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="coursesOptions"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label i18n>Teacher</label>
+            <p-multiSelect
+              formControlName="teacher"
+              [options]="teachers"
+              optionValue="id"
+              optionLabel="id"
+              appendTo="body"
+              [showHeader]="false"
+            ></p-multiSelect>
+          </div>
+          <div class="field">
+            <label i18n>Timetable</label>
+            <p-dropdown
+              formControlName="table"
+              [options]="timetablesVScroll"
+              optionValue="id"
+              optionLabel="start_time"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="timetablesOptions"
+            >
+              <ng-template let-table pTemplate="item">
+                {{ table.start_time }} - {{ table.end_time }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Start date</label>
+            <p-calendar
+              appendTo="body"
+              (onSelect)="selectDateE($event, 'start_date')"
+            ></p-calendar>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>End date</label>
+            <p-calendar
+              appendTo="body"
+              (onSelect)="selectDateE($event, 'end_date')"
+            ></p-calendar>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Descriptions</label>
             <textarea
-              id="description"
+              id="descriptions"
               pInputTextarea
               formControlName="descriptions"
               rows="3"

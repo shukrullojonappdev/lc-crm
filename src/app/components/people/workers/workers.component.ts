@@ -30,7 +30,6 @@ export class WorkersComponent {
   roles: any[];
   // * User
   users: User[];
-  usersLoading: boolean;
 
   // * Department
   departments: Department[];
@@ -106,12 +105,9 @@ export class WorkersComponent {
   }
 
   getUsers() {
-    this.usersLoading = true;
-    this.users = [];
     this.usersService.getUsers().subscribe((res: any) => {
       this.users = res;
     });
-    this.usersLoading = false;
   }
 
   onDepartmentsLazyLoad(e: any) {
@@ -216,6 +212,7 @@ export class WorkersComponent {
   // Open dialog functions
   openNewWorkerDialog() {
     this.newWorkerDialog = true;
+    this.users = [];
     this.departments = [];
     this.departmentsVScroll = [];
     this.departmentsPage = 1;
@@ -229,8 +226,9 @@ export class WorkersComponent {
     this.getCourses(this.coursesPage);
   }
 
-  openEditWorkerDialog(Worker: Worker) {
+  openEditWorkerDialog(worker: Worker) {
     this.editWorkerDialog = true;
+    this.users = [];
     this.departments = [];
     this.departmentsVScroll = [];
     this.departmentsPage = 1;
@@ -242,12 +240,12 @@ export class WorkersComponent {
     this.getUsers();
     this.getDepartments(this.departmentsPage);
     this.getCourses(this.coursesPage);
-    this.editWorkerForm.patchValue(Worker as any);
+    this.editWorkerForm.patchValue(worker as any);
   }
 
-  openDeleteWorkerDialog(Worker: Worker) {
+  openDeleteWorkerDialog(worker: Worker) {
     this.deleteWorkerDialog = true;
-    this.selectedWorker = Worker;
+    this.selectedWorker = worker;
   }
 
   openDeleteWorkersDialog() {

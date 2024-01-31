@@ -3,11 +3,11 @@ import { Topic } from './topic';
 export interface Group {
   id: string | null;
   title: string;
-  course: number | null;
-  teacher: number | null;
-  table: number | null;
-  start_date: string | null;
-  end_date: string | null;
+  course: number;
+  teacher: number[] | null;
+  table: number[] | null;
+  start_date: string;
+  end_date: string;
   price: number | null;
   descriptions: string | null;
 }
