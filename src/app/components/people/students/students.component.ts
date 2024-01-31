@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MessageService, ScrollerOptions } from 'primeng/api';
+import { Course } from 'src/app/api/course';
+import { Group } from 'src/app/api/group';
 import { Student } from 'src/app/api/student';
 import { User } from 'src/app/api/user';
+import { CoursesService } from 'src/app/service/courses.service';
+import { GroupsService } from 'src/app/service/groups.service';
 import { StudentsService } from 'src/app/service/students.service';
 import { UsersService } from 'src/app/service/users.service';
 
@@ -32,22 +36,52 @@ export class StudentsComponent {
   page: number = 1;
   totalRecords = 0;
 
+  // * Department
+  groups: Group[];
+  groupsPage: number;
+  groupsLoading: boolean;
+  groupsVScroll: any[];
+  groupsVScrollLoads: number;
+  groupsOptions: ScrollerOptions = {
+    delay: 250,
+    showLoader: true,
+    lazy: true,
+    onLazyLoad: this.onGroupsLazyLoad.bind(this)
+  };
+
+  // * Course
+  courses: Course[];
+  coursesPage: number;
+  coursesLoading: boolean;
+  coursesVScroll: any[];
+  coursesVScrollLoads: number;
+  coursesOptions: ScrollerOptions = {
+    delay: 250,
+    showLoader: true,
+    lazy: true,
+    onLazyLoad: this.onCoursesLazyLoad.bind(this)
+  };
+
   newStudentForm = this.fb.group({
-    title: ['', Validators.required],
-    Student: [' ', Validators.required],
+    user: ['', Validators.required],
+    group: [[], Validators.required],
+    course: [[], Validators.required],
     descriptions: ['']
   });
 
   editStudentForm = this.fb.group({
     id: ['', Validators.required],
-    title: ['', Validators.required],
-    Student: ['', Validators.required],
+    user: ['', Validators.required],
+    group: [[], Validators.required],
+    course: [[], Validators.required],
     descriptions: ['']
   });
 
   constructor(
     private studentsService: StudentsService,
     private usersService: UsersService,
+    private coursesService: CoursesService,
+    private groupsService: GroupsService,
     private messageService: MessageService,
     private fb: FormBuilder
   ) {}
@@ -56,24 +90,112 @@ export class StudentsComponent {
     this.getStudents(this.page);
     this.cols = [
       { field: 'id', header: 'ID' },
-      { field: 'title', header: 'Title' },
-      { field: 'Student', header: 'User' }
+      { field: 'user', header: 'Fullname' },
+      { field: 'group', header: 'Group' },
+      { field: 'course', header: 'Course' }
     ];
   }
 
+  onGroupsLazyLoad(e: any) {
+    const { first, last } = e;
+    if (!this.groupsLoading) this.groupsVScrollLoads++;
+    if (this.groupsVScrollLoads === this.groupsPage) {
+      this.getGroups(this.groupsPage);
+    }
+
+    const items = [...this.groupsVScroll];
+    for (let i = first; i < last; i++) {
+      items[i] = { ...this.groups[i] };
+    }
+    this.groupsVScroll = items;
+  }
+
+  getGroups(page: number) {
+    this.groupsLoading = true;
+    this.groupsService.getGroups(page).subscribe((res) => {
+      if (this.groupsVScroll.length === 0) {
+        const tempEmptyArr = [];
+        for (let i = 0; i < res.count; i++) {
+          tempEmptyArr.push({
+            id: '',
+            title: '',
+            is_active: '',
+            descriptions: ''
+          });
+        }
+        this.groupsVScroll = tempEmptyArr;
+      }
+
+      if (this.groups.length !== res.count) {
+        const tempWorkers = [...this.groups];
+        res.results.forEach((e: any, i: number) => {
+          tempWorkers[(this.groupsPage - 1) * 10 + i] = e;
+        });
+
+        this.groups = tempWorkers;
+      }
+
+      if (this.groupsPage * 10 < res.count) {
+        this.groupsPage++;
+      }
+    });
+    this.groupsLoading = false;
+  }
+
+  onCoursesLazyLoad(e: any) {
+    const { first, last } = e;
+    if (!this.coursesLoading) this.coursesVScrollLoads++;
+    if (this.coursesVScrollLoads === this.coursesPage) {
+      this.getCourses(this.coursesPage);
+    }
+
+    const items = [...this.coursesVScroll];
+    for (let i = first; i < last; i++) {
+      items[i] = { ...this.courses[i] };
+    }
+    this.coursesVScroll = items;
+  }
+
+  getCourses(page: number) {
+    this.coursesLoading = true;
+    this.coursesService.getCourses(page).subscribe((res) => {
+      if (this.coursesVScroll.length === 0) {
+        const tempEmptyArr = [];
+        for (let i = 0; i < res.count; i++) {
+          tempEmptyArr.push({
+            id: '',
+            title: '',
+            descriptions: ''
+          });
+        }
+        this.coursesVScroll = tempEmptyArr;
+      }
+
+      if (this.courses.length !== res.count) {
+        const tempCourses = [...this.courses];
+        res.results.forEach((e: any, i: number) => {
+          tempCourses[(this.coursesPage - 1) * 10 + i] = e;
+        });
+
+        this.courses = tempCourses;
+      }
+
+      if (this.coursesPage * 10 < res.count) {
+        this.coursesPage++;
+      }
+    });
+    this.coursesLoading = false;
+  }
+
   getUsers() {
-    this.users = [];
-    this.usersLoading = true;
     this.usersService.getUsers().subscribe((res: any) => {
       this.users = res;
     });
-    this.usersLoading = false;
   }
 
   getStudents(page: number) {
     this.studentsService.getStudents(page).subscribe((res: any) => {
-      this.totalRecords = res.count;
-      this.students = res.results;
+      this.students = res.students;
       this.loading = false;
     });
   }
@@ -87,12 +209,34 @@ export class StudentsComponent {
   // Open dialog functions
   openNewStudentDialog() {
     this.newStudentDialog = true;
+    this.users = [];
+    this.groups = [];
+    this.groupsVScroll = [];
+    this.groupsPage = 1;
+    this.groupsLoading = true;
+    this.courses = [];
+    this.coursesVScroll = [];
+    this.coursesPage = 1;
+    this.coursesVScrollLoads = 1;
     this.getUsers();
+    this.getGroups(this.groupsPage);
+    this.getCourses(this.coursesPage);
   }
 
   openEditStudentDialog(Student: Student) {
     this.editStudentDialog = true;
+    this.users = [];
+    this.groups = [];
+    this.groupsVScroll = [];
+    this.groupsPage = 1;
+    this.groupsLoading = true;
+    this.courses = [];
+    this.coursesVScroll = [];
+    this.coursesPage = 1;
+    this.coursesVScrollLoads = 1;
     this.getUsers();
+    this.getGroups(this.groupsPage);
+    this.getCourses(this.coursesPage);
     this.editStudentForm.patchValue(Student as any);
   }
 
@@ -198,5 +342,11 @@ export class StudentsComponent {
 
   onGlobalFilter(table: any, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  checkToRole(user: User) {
+    if (user.is_teacher) return false;
+    if (user.is_staff) return false;
+    return true;
   }
 }

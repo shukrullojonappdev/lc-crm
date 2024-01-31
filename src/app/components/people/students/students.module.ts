@@ -20,6 +20,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { PaginatorModule } from 'primeng/paginator';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [StudentsComponent],
@@ -41,7 +42,8 @@ import { PaginatorModule } from 'primeng/paginator';
     RadioButtonModule,
     InputNumberModule,
     DialogModule,
-    PaginatorModule
+    PaginatorModule,
+    MultiSelectModule
   ],
   providers: [MessageService]
 })
