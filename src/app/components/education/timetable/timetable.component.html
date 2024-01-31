@@ -1,1 +1,360 @@
-<p>timetable works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="New"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              (click)="openNewTimetableDialog()"
+            ></button>
+            <button
+              pButton
+              pRipple
+              i18n-label
+              label="Delete"
+              icon="pi pi-trash"
+              class="p-button-danger"
+              (click)="openDeleteTimetablesDialog()"
+              [disabled]="!selectedTimetables || !selectedTimetables.length"
+            ></button>
+          </div>
+        </ng-template>
+
+        <!-- <ng-template pTemplate="right">
+          <p-fileUpload
+            mode="basic"
+            accept="image/*"
+            [maxFileSize]="1000000"
+            label="Import"
+            chooseLabel="Import"
+            class="mr-2 inline-block"
+          ></p-fileUpload>
+          <button
+            pButton
+            pRipple
+            label="Export"
+            icon="pi pi-upload"
+            class="p-button-help"
+            (click)="dt.exportCSV()"
+          ></button>
+        </ng-template> -->
+      </p-toolbar>
+
+      <p-table
+        #dt
+        [value]="Timetables"
+        dataKey="id"
+        [(selection)]="selectedTimetables"
+        selectionMode="multiple"
+        [rowHover]="true"
+        [rows]="10"
+        [columns]="cols"
+        [loading]="loading"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+          >
+            <h5 class="m-0">Manage timetables</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter(dt, $event)"
+                placeholder="Search..."
+                i18n-placeholder
+                class="w-full sm:w-auto"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="start_time" i18n>
+              Start time <p-sortIcon field="start_time"></p-sortIcon>
+            </th>
+            <th pSortableColumn="end_time" i18n>
+              End time <p-sortIcon field="end_time"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-timetable>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="timetable"></p-tableCheckbox>
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              {{ timetable.code || timetable.id }}
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              {{ timetable.start_time }}
+            </td>
+            <td style="width: 25%; min-width: 10rem">
+              {{ timetable.end_time }}
+            </td>
+            <td>
+              <div class="flex justify-content-end">
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-success mr-2"
+                  (click)="openEditTimetableDialog(timetable)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-warning"
+                  (click)="openDeleteTimetableDialog(timetable)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator
+        [totalRecords]="totalRecords"
+        [rows]="10"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
+    </div>
+
+    <!-- * Create element dialog -->
+    <p-dialog
+      [(visible)]="newTimetableDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="New timetable"
+      [modal]="true"
+      class="p-fluid"
+      [draggable]="false"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="newTimetableForm" (submit)="createNewTimetable()">
+          <div class="field">
+            <label for="title" i18n>Start time</label>
+            <p-inputMask
+              mask="99:99"
+              formControlName="start_time"
+            ></p-inputMask>
+          </div>
+          <div class="field">
+            <label for="title" i18n>End time</label>
+            <p-inputMask mask="99:99" formControlName="end_time"></p-inputMask>
+          </div>
+          <div class="field">
+            <label for="title" i18n>Room</label>
+            <p-dropdown
+              formControlName="room"
+              [options]="roomsVScroll"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="roomsOptions"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="title" i18n>Type</label>
+            <p-dropdown
+              formControlName="type"
+              [options]="types"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Descriptions</label>
+            <textarea
+              id="descriptions"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideNewTimetableDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="createNewTimetable()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- *  Edit element dialog -->
+    <p-dialog
+      [(visible)]="editTimetableDialog"
+      [style]="{ width: '450px', margin: '0 10px' }"
+      header="Edit timetable"
+      [modal]="true"
+      class="p-fluid"
+      [draggable]="false"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="editTimetableForm">
+          <div class="field">
+            <label for="title" i18n>Start time</label>
+            <p-inputMask
+              mask="99:99"
+              formControlName="start_time"
+            ></p-inputMask>
+          </div>
+          <div class="field">
+            <label for="title" i18n>End time</label>
+            <p-inputMask mask="99:99" formControlName="end_time"></p-inputMask>
+          </div>
+          <div class="field">
+            <label for="title" i18n>Room</label>
+            <p-dropdown
+              formControlName="room"
+              [options]="roomsVScroll"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+              [virtualScroll]="true"
+              [virtualScrollItemSize]="38"
+              [virtualScrollOptions]="roomsOptions"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="title" i18n>Type</label>
+            <p-dropdown
+              formControlName="type"
+              [options]="types"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+            ></p-dropdown>
+          </div>
+          <div class="field">
+            <label for="descriptions" i18n>Descriptions</label>
+            <textarea
+              id="descriptions"
+              pInputTextarea
+              formControlName="descriptions"
+              rows="3"
+              cols="20"
+            ></textarea>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideEditTimetableDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="updateTimetable()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete element dialog -->
+    <p-dialog
+      [(visible)]="deleteTimetableDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="selectedTimetable"
+          >Are you sure you want to delete <b>{{ selectedTimetable.id }}</b
+          >?</span
+        >
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteTimetableDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          (click)="deleteTimetable()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <!-- * Delete selected elements dialog   -->
+    <p-dialog
+      [(visible)]="deleteTimetablesDialog"
+      header="Confirm"
+      [modal]="true"
+      [style]="{ width: '450px', margin: '0 10px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected products?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="hideDeleteTimetablesDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Yes"
+          [loading]="selectedTimetables.length === 0"
+          (click)="deleteTimetables()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

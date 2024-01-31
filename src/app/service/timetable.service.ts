@@ -36,4 +36,8 @@ export class TimetableService {
   deleteTimetable(id: string) {
     return this.http.delete(`${environment.apiUrl}/api/table/${id}`);
   }
+
+  getTimetableTypes() {
+    return this.http.get(`${environment.apiUrl}/api/tableType?page=1`);
+  }
 }

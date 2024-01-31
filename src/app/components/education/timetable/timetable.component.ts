@@ -24,7 +24,10 @@ export class TimetableComponent {
 
   // * Dropdown values
 
-  // * room
+  // * Table type
+  types: any[];
+
+  // * Room
   rooms: Room[];
   roomsPage: number;
   roomsLoading: boolean;
@@ -69,9 +72,12 @@ export class TimetableComponent {
     this.getTimetables(this.page);
     this.cols = [
       { field: 'id', header: 'ID' },
-      { field: 'title', header: 'Title' },
-      { field: 'room', header: 'room' }
+      { field: 'start_time', header: 'Start time' },
+      { field: 'end_time', header: 'End time' }
     ];
+    this.timetablesService.getTimetableTypes().subscribe((res: any) => {
+      this.types = res.results;
+    });
   }
 
   onroomsLazyLoad(e: any) {
