@@ -6,6 +6,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [],
@@ -15,14 +16,16 @@ import { PaginatorModule } from 'primeng/paginator';
     ToolbarModule,
     ButtonModule,
     TableModule,
-    PaginatorModule
+    PaginatorModule,
+    InputTextModule
   ],
   exports: [
     BreadcrumbModule,
     ToolbarModule,
     ButtonModule,
     TableModule,
-    PaginatorModule
+    PaginatorModule,
+    InputTextModule
   ],
   providers: []
 })

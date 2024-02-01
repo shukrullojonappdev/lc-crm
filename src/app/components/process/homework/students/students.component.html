@@ -2,9 +2,62 @@
   <div class="col-12">
     <div class="card px-6 py-6">
       <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
-      <span routerLink="/process/homework/groups/2/students/1/homeworks"
-        >student</span
+      <div class="mb-4"></div>
+      <p-table
+        #dt
+        [value]="students"
+        dataKey="id"
+        [rowHover]="true"
+        [columns]="cols"
+        [loading]="loading"
+        selectionMode="single"
+        (onRowSelect)="onRowSelect($event)"
       >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+          >
+            <h5 class="m-0">Students group {{ groupId }}</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="onGlobalFilter(dt, $event)"
+                placeholder="Search..."
+                i18n-placeholder
+                class="w-full sm:w-auto"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="full_name" i18n>
+              Fullname <p-sortIcon field="full_name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="phone" i18n>
+              Phone number <p-sortIcon field="phone"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-student>
+          <tr [pSelectableRow]="student">
+            <td style="min-width: 10rem">
+              {{ student.code || student.id }}
+            </td>
+            <td style="width: 50%; min-width: 10rem">
+              {{ student.user.full_name }}
+            </td>
+            <td style="width: 50%; min-width: 10rem">
+              {{ student.user.phone }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </div>

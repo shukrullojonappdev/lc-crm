@@ -18,6 +18,10 @@ export class GroupsService {
     }>(`${environment.apiUrl}/api/group?page=${page}`);
   }
 
+  getGroupStudents(id: string) {
+    return this.http.get(`${environment.apiUrl}/api/group_students/${id}`);
+  }
+
   getGroup(id: string) {
     return this.http.get<Group>(`${environment.apiUrl}/api/group/${id}`);
   }
