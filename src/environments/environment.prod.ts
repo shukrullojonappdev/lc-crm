@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api-lms.al-raqam.com',
+  apiUrl: 'https://lms-backend-django.7vgnlc.easypanel.host/swagger',
   version: 'v1.0.1'
 };

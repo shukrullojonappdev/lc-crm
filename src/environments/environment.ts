@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api-lms.al-raqam.com',
-  version: 'v1.0.0'
+  apiUrl: 'https://lms-backend-django.7vgnlc.easypanel.host/swagger',
+  version: 'v1.1.0'
 };
 
 /*
