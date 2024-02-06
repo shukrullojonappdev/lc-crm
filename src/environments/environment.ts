@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://lms-backend-django.7vgnlc.easypanel.host/swagger',
+  apiUrl: 'https://lms-backend-django.7vgnlc.easypanel.host',
   version: 'v1.1.0'
 };
 
