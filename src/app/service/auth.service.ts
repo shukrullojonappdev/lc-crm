@@ -19,30 +19,44 @@ export class AuthService {
     const tempPhone = phone.replaceAll('-', '');
     this.registerSteps = 'otp';
     sessionStorage.setItem('regStep', this.registerSteps);
-    return this.http.post(`${environment.apiUrl}/api/sentOTP/`, {
-      phone_number: tempPhone
-    });
+    return this.http.post(
+      `${environment.apiUrl}/api/sentOTP/`,
+      {
+        phone_number: tempPhone
+      },
+      { headers: { Anonymous: 'true' } }
+    );
   }
 
   checkOtp(otp: string, phone: string) {
     this.registerSteps = 'info';
     sessionStorage.setItem('regStep', this.registerSteps);
-    return this.http.post(`${environment.apiUrl}/api/sentOTP_and_phone/`, {
-      phone_number: phone,
-      verification_code: otp
-    });
+    return this.http.post(
+      `${environment.apiUrl}/api/sentOTP_and_phone/`,
+      {
+        phone_number: phone,
+        verification_code: otp
+      },
+      { headers: { Anonymous: 'true' } }
+    );
   }
 
   createUser(payload: { phone: string; full_name: string; password: string }) {
     this.registerSteps;
-    return this.http.post(`${environment.apiUrl}/api/userApi/`, payload);
+    return this.http.post(`${environment.apiUrl}/api/userApi/`, payload, {
+      headers: { Anonymous: 'true' }
+    });
   }
 
   login(phone: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/token/`, {
-      phone,
-      password
-    });
+    return this.http.post(
+      `${environment.apiUrl}/token/`,
+      {
+        phone,
+        password
+      },
+      { headers: { Anonymous: 'true' } }
+    );
   }
 
   refreshAccessToken() {
