@@ -60,6 +60,11 @@ export class AppMenuComponent implements OnInit {
             label: $localize`Timetable`,
             icon: 'pi pi-fw pi-calendar',
             routerLink: ['/education/timetable']
+          },
+          {
+            label: $localize`Homeworks`,
+            icon: 'pi pi-fw pi-calendar',
+            routerLink: ['/education/homeworks']
           }
         ]
       },

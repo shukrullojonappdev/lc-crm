@@ -21,6 +21,11 @@ const routes: Routes = [
     path: 'timetable',
     loadChildren: () =>
       import('./timetable/timetable.module').then((m) => m.TimetableModule)
+  },
+  {
+    path: 'homeworks',
+    loadChildren: () =>
+      import('./homeworks/homeworks.module').then((m) => m.HomeworksModule)
   }
 ];
 
