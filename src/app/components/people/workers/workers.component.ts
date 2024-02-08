@@ -7,6 +7,7 @@ import { User } from 'src/app/api/user';
 import { Worker } from 'src/app/api/worker';
 import { CoursesService } from 'src/app/service/courses.service';
 import { DepartmentsService } from 'src/app/service/departments.service';
+import { TeacherService } from 'src/app/service/teacher.service';
 import { UsersService } from 'src/app/service/users.service';
 import { WorkersService } from 'src/app/service/workers.service';
 
@@ -62,6 +63,7 @@ export class WorkersComponent {
   totalRecords = 0;
 
   newWorkerForm = this.fb.group({
+    role: ['', Validators.required],
     user: ['', Validators.required],
     departments: [[], Validators.required],
     course: [[], Validators.required],
@@ -81,6 +83,7 @@ export class WorkersComponent {
     private coursesService: CoursesService,
     private usersService: UsersService,
     private departmentsService: DepartmentsService,
+    private teachersService: TeacherService,
     private messageService: MessageService,
     private fb: FormBuilder
   ) {}
@@ -275,18 +278,33 @@ export class WorkersComponent {
   // Dialog actions
   createNewWorker() {
     if (this.newWorkerForm.valid) {
-      this.workersService
-        .createWorker(this.newWorkerForm.value as Worker)
-        .subscribe(() => {
-          this.newWorkerForm.reset();
-          this.newWorkerDialog = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'New worker created'
+      if (Number(this.newWorkerForm.controls['role'].value) === 0) {
+        this.teachersService
+          .createTeacher(this.newWorkerForm.value as Worker)
+          .subscribe(() => {
+            this.newWorkerForm.reset();
+            this.newWorkerDialog = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'New teacher created'
+            });
+            this.getWorkers(this.search, this.ordering);
           });
-          this.getWorkers(this.search, this.ordering);
-        });
+      } else {
+        this.workersService
+          .createWorker(this.newWorkerForm.value as Worker)
+          .subscribe(() => {
+            this.newWorkerForm.reset();
+            this.newWorkerDialog = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'New staff created'
+            });
+            this.getWorkers(this.search, this.ordering);
+          });
+      }
     }
   }
 

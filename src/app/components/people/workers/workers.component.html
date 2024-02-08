@@ -136,9 +136,24 @@
       <ng-template pTemplate="content">
         <form [formGroup]="newWorkerForm" (submit)="createNewWorker()">
           <div class="field">
+            <label i18n>Role</label>
+            <p-dropdown
+              formControlName="role"
+              [options]="roles"
+              optionValue="id"
+              optionLabel="title"
+              appendTo="body"
+            >
+              <ng-template let-role pTemplate="item">
+                <div class="show">
+                  {{ role.title }}
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="field">
             <label i18n>User</label>
             <p-dropdown
-              id="md"
               formControlName="user"
               [options]="users"
               optionValue="id"
