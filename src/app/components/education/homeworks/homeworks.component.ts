@@ -83,7 +83,8 @@ export class HomeworksComponent {
     this.cols = [
       { field: 'id', header: 'ID' },
       { field: 'course', header: 'Group' },
-      { field: 'topic', header: 'Topic' }
+      { field: 'topic', header: 'Topic' },
+      { field: 'is_active', header: 'Is active' }
     ];
   }
 
