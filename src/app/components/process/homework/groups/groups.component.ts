@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
   styleUrl: './groups.component.scss'
 })
 export class GroupsComponent implements OnInit {
-  home: any;
   items: any;
   groups: Group[] = [];
   loading = true;
@@ -38,8 +37,7 @@ export class GroupsComponent implements OnInit {
   }
 
   initBreadcrumb() {
-    const { home, items } = this.breadcrumpService.getBreadcrumb();
-    this.home = home;
+    const { items } = this.breadcrumpService.getBreadcrumb();
     this.items = items;
   }
 
@@ -61,6 +59,6 @@ export class GroupsComponent implements OnInit {
   }
 
   onRowSelect(e: any) {
-    this.router.navigate(['/process/homework/groups', e.data.id, 'students']);
+    this.router.navigate(['/process/groups', e.data.id, 'students']);
   }
 }

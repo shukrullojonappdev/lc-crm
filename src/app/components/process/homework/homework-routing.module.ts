@@ -2,22 +2,22 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
-    path: 'groups',
+    path: '',
     loadChildren: () =>
       import('./groups/groups.module').then((m) => m.GroupsModule)
   },
   {
-    path: 'groups/:groupId/students',
+    path: ':groupId/students',
     loadChildren: () =>
       import('./students/students.module').then((m) => m.StudentsModule)
   },
   {
-    path: 'groups/:groupId/students/:studentId/homeworks',
+    path: ':groupId/students/:studentId/homeworks',
     loadChildren: () =>
       import('./student/student.module').then((m) => m.StudentModule)
   },
   {
-    path: 'groups/:groupId/students/:studentId/homeworks/:homeworkId',
+    path: ':groupId/students/:studentId/homeworks/:homeworkId',
     loadChildren: () =>
       import('./student-info/student-info.module').then(
         (m) => m.StudentInfoModule

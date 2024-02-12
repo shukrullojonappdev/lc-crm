@@ -47,6 +47,13 @@ import { authGuard } from './guard/auth.guard';
                 import('./components/process/process.module').then(
                   (m) => m.ProcessModule
                 )
+            },
+            {
+              path: 'student',
+              loadChildren: () =>
+                import('./components/student/student.module').then(
+                  (m) => m.StudentModule
+                )
             }
           ]
         },

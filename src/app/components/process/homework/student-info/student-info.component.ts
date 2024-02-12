@@ -1,12 +1,7 @@
-import {
-  AfterRenderPhase,
-  Component,
-  OnInit,
-  ViewChild,
-  afterNextRender
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreadcrumpService } from '../shared/breadcrump.service';
 import { RepoService, Tree } from '../shared/repo.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-student-info',
@@ -16,24 +11,7 @@ import { RepoService, Tree } from '../shared/repo.service';
 export class StudentInfoComponent implements OnInit {
   home: any;
   items: any[] = [];
-  sidebarVisible = true;
   text = '';
-  options = {
-    debug: 'info',
-    modules: {
-      toolbar: '#toolbar'
-    },
-    placeholder: 'Compose an epic...',
-    readOnly: true,
-    theme: 'snow'
-  };
-
-  modules: {
-    formula: false;
-    toolbar: [['blockquote', 'code-block']];
-    syntax: true;
-  };
-  formats: ['code-block', 'code'];
 
   data = {
     user: 'shukrullojondevnu',
@@ -44,6 +22,7 @@ export class StudentInfoComponent implements OnInit {
   treeValue: Tree[] = [];
 
   constructor(
+    private route: ActivatedRoute,
     private breadcrumpService: BreadcrumpService,
     private repoService: RepoService
   ) {}
@@ -138,9 +117,5 @@ export class StudentInfoComponent implements OnInit {
           });
       }
     }
-  }
-
-  log(e: any) {
-    console.log(e);
   }
 }

@@ -18,6 +18,10 @@ export class HomeworksService {
     }>(`${environment.apiUrl}/api/homeWork?page=${page}`);
   }
 
+  getHomeworksByStudentId(id: string) {
+    return this.http.get(`${environment.apiUrl}/api/student_hmS/${id}`);
+  }
+
   getHomework(id: string) {
     return this.http.get<Homework>(`${environment.apiUrl}/api/homeWork/${id}`);
   }

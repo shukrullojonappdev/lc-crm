@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BreadcrumpService } from '../shared/breadcrump.service';
+import { HomeworksService } from 'src/app/service/homeworks.service';
+import { Homework } from 'src/app/api/homework';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-student',
@@ -10,10 +13,22 @@ export class StudentComponent implements OnInit {
   home: any;
   items: any[] = [];
 
-  constructor(private breadcrumpService: BreadcrumpService) {}
+  homeworks: Homework[];
+
+  constructor(
+    private breadcrumpService: BreadcrumpService,
+    private homeworksService: HomeworksService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    const { studentId } = this.route.snapshot.params;
     this.initBreadcrumb();
+    this.homeworksService
+      .getHomeworksByStudentId(studentId)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   initBreadcrumb() {

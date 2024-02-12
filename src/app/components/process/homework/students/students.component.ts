@@ -55,7 +55,7 @@ export class StudentsComponent implements OnInit {
 
   onRowSelect(e: any) {
     this.router.navigate([
-      '/process/homework/groups',
+      '/process/groups',
       this.groupId,
       'students',
       e.data.id,

@@ -9,7 +9,7 @@ enum homeworkRouteTypes {
 
 @Injectable()
 export class BreadcrumpService {
-  homeRoute = '/process/homework';
+  homeRoute = '/process/groups';
   home = {
     icon: 'pi pi-flag',
     command: () => this.router.navigate([this.homeRoute])
