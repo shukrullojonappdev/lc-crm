@@ -30,6 +30,10 @@ export class GroupsService {
     return this.http.post<Group>(`${environment.apiUrl}/api/group/`, group);
   }
 
+  getGroupsByStudentId(id: string) {
+    return this.http.get(`${environment.apiUrl}/api/student_groups/${id}/`);
+  }
+
   updateGroup(group: Group) {
     return this.http.put<Group>(
       `${environment.apiUrl}/api/group/${group.id}/`,

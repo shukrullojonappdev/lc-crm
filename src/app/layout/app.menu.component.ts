@@ -107,9 +107,9 @@ export class AppMenuComponent implements OnInit {
             routerLink: ['/student/timetable']
           },
           {
-            label: $localize`Homeworks`,
+            label: $localize`Groups`,
             icon: 'pi pi-fw pi-box',
-            routerLink: ['/student/homeworks']
+            routerLink: ['/student/groups']
           }
         ]
       }

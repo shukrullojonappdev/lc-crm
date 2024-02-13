@@ -46,7 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
                   const access = res.access;
 
                   this.authService
-                    .setTokens({ access, refresh }, null)
+                    .setTokensAndPhone({ access, refresh }, null, null)
                     .then((_res) => {
                       // * Refresh page after token refreshed
                       const currentUrl = this.router.url;

@@ -11,7 +11,7 @@ export class AuthService {
   refreshToken: string = '';
   accessToken: string = '';
   registerSteps: RegSteps = 'phone';
-  tokensIn: 'local' | 'session' | null = null;
+  dataIn: 'local' | 'session' | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -65,21 +65,24 @@ export class AuthService {
     });
   }
 
-  async setTokens(
+  async setTokensAndPhone(
     tokens: { access: string; refresh: string },
-    remembeMe: boolean | null
+    remembeMe: boolean | null,
+    phone: string | null
   ) {
     this.accessToken = tokens.access;
     this.refreshToken = tokens.refresh;
 
     // * Check tokens place for refresh access token
     if (remembeMe == null) {
-      if (this.tokensIn === 'local') this.saveTokensToLocalStorage(tokens);
-      if (this.tokensIn === 'session') this.saveTokensToSessionStorage(tokens);
+      if (this.dataIn === 'local') this.saveTokensToLocalStorage(tokens);
+      if (this.dataIn === 'session') this.saveTokensToSessionStorage(tokens);
     } else if (remembeMe) {
       this.saveTokensToLocalStorage(tokens);
+      localStorage.setItem('phone', phone);
     } else {
       this.saveTokensToSessionStorage(tokens);
+      sessionStorage.setItem('phone', phone);
     }
   }
 
@@ -92,23 +95,23 @@ export class AuthService {
       const tokens = JSON.parse(localStorage.getItem('tokens'));
       this.accessToken = tokens.access;
       this.refreshToken = tokens.refresh;
-      this.tokensIn = 'local';
+      this.dataIn = 'local';
     }
     if (sessionStorage.getItem('tokens')) {
       const tokens = JSON.parse(sessionStorage.getItem('tokens'));
       this.accessToken = tokens.access;
       this.refreshToken = tokens.refresh;
-      this.tokensIn = 'session';
+      this.dataIn = 'session';
     }
   }
 
   saveTokensToLocalStorage(tokens: { access: string; refresh: string }) {
-    this.tokensIn = 'local';
+    this.dataIn = 'local';
     localStorage.setItem('tokens', JSON.stringify(tokens));
   }
 
   saveTokensToSessionStorage(tokens: { access: string; refresh: string }) {
-    this.tokensIn = 'session';
+    this.dataIn = 'session';
     sessionStorage.setItem('tokens', JSON.stringify(tokens));
   }
 
@@ -134,5 +137,18 @@ export class AuthService {
   validatePhoneNumber(phone: string) {
     const regex = /^\+998\d{9}$/;
     return regex.test(phone);
+  }
+
+  setCurrentUser() {
+    const phone =
+      localStorage.getItem('phone') || sessionStorage.getItem('phone');
+    this.http
+      .post(`${environment.apiUrl}/api/userInfo/`, { phone })
+      .subscribe((res) => {
+        if (this.dataIn === 'local')
+          localStorage.setItem('currentUser', JSON.stringify(res));
+        if (this.dataIn === 'session')
+          sessionStorage.setItem('currentUser', JSON.stringify(res));
+      });
   }
 }

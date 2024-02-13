@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'homeworks',
+    path: 'groups',
     loadChildren: () =>
-      import('./homeworks/homeworks.module').then((m) => m.HomeworksModule)
+      import('./homework/homework.module').then((m) => m.HomeworkModule)
   },
   {
     path: 'timetable',

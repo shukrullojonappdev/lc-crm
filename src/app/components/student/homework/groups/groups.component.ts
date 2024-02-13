@@ -13,15 +13,15 @@ export class GroupsComponent implements OnInit {
   groups: Group[] = [];
   loading = true;
   cols: any[] = [];
-
-  // * Paginator values
-  page: number = 1;
-  totalRecords = 0;
+  user: any;
 
   constructor(private groupsService: GroupsService, private router: Router) {}
 
   ngOnInit() {
-    this.getGroups(this.page);
+    this.user =
+      JSON.parse(localStorage.getItem('currentUser')) ||
+      JSON.parse(sessionStorage.getItem('currentUser'));
+    this.getGroups();
     this.cols = [
       { field: 'id', header: 'ID' },
       { field: 'title', header: 'Title' },
@@ -30,17 +30,15 @@ export class GroupsComponent implements OnInit {
     ];
   }
 
-  getGroups(page: number) {
-    this.groupsService.getGroups(page).subscribe((res: any) => {
-      this.totalRecords = res.count;
-      this.groups = res.results;
-      this.loading = false;
-    });
-  }
+  getGroups() {
+    console.log(this.user);
 
-  onPageChange(e: any) {
-    this.loading = true;
-    this.getGroups(e.page + 1);
+    this.groupsService
+      .getGroupsByStudentId(this.user.id)
+      .subscribe((res: any) => {
+        this.groups = res.results;
+        this.loading = false;
+      });
   }
 
   onGlobalFilter(table: any, event: Event) {
@@ -48,6 +46,6 @@ export class GroupsComponent implements OnInit {
   }
 
   onRowSelect(e: any) {
-    this.router.navigate(['/process/groups', e.data.id, 'students']);
+    this.router.navigate(['/student/homeworks', e.data.id]);
   }
 }

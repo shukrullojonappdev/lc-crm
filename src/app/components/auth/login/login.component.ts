@@ -58,7 +58,11 @@ export class LoginComponent {
           (res: any) => {
             this.btnLoading = false;
             this.authService
-              .setTokens(res, this.loginForm.value.rememberMe)
+              .setTokensAndPhone(
+                res,
+                this.loginForm.value.rememberMe,
+                tempPhone
+              )
               .then(() => {
                 this.router.navigate(['/']);
               });
