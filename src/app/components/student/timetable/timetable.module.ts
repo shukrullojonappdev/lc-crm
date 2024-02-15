@@ -3,15 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { TimetableRoutingModule } from './timetable-routing.module';
 import { TimetableComponent } from './timetable.component';
-
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
-  declarations: [
-    TimetableComponent
-  ],
-  imports: [
-    CommonModule,
-    TimetableRoutingModule
-  ]
+  declarations: [TimetableComponent],
+  imports: [CommonModule, TimetableRoutingModule]
 })
-export class TimetableModule { }
+export class TimetableModule {}
