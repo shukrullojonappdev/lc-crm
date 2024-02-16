@@ -7,6 +7,6 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [TimetableComponent],
-  imports: [CommonModule, TimetableRoutingModule]
+  imports: [CommonModule, TimetableRoutingModule, FullCalendarModule]
 })
 export class TimetableModule {}

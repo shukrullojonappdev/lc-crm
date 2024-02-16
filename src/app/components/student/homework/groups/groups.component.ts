@@ -34,7 +34,7 @@ export class GroupsComponent implements OnInit {
     console.log(this.user);
 
     this.groupsService
-      .getGroupsByStudentId(this.user.id)
+      .getGroupsByStudentId(this.user.user.id)
       .subscribe((res: any) => {
         this.groups = res.results;
         this.loading = false;

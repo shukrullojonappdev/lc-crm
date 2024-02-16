@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/core';
+import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Component({
   selector: 'app-timetable',
@@ -8,10 +9,15 @@ import { CalendarOptions } from '@fullcalendar/core';
 })
 export class TimetableComponent {
   calendarOptions: CalendarOptions = {
+    plugins: [timeGridPlugin],
     initialView: 'timeGridWeek',
     eventClick: this.handleDateClick.bind(this), // MUST ensure `this` context is maintained
     events: [
-      { title: 'event 1', date: '2019-04-01' },
+      {
+        title: 'event 1',
+        start: '2024-02-16T12:30:00',
+        end: '2024-02-16T13:30:00'
+      },
       { title: 'event 2', date: '2019-04-02' }
     ]
   };
