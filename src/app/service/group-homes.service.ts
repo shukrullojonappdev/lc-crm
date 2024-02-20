@@ -31,6 +31,10 @@ export class GroupHomesService {
     );
   }
 
+  getGHomeworksByGroup(id: string) {
+    return this.http.get(`${environment.apiUrl}/group_hm_get/${id}`);
+  }
+
   updateGroupHome(groupHome: GroupHome) {
     return this.http.put<GroupHome>(
       `${environment.apiUrl}/api/groupHome/${groupHome.id}/`,

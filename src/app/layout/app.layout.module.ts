@@ -18,6 +18,8 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
   declarations: [
@@ -41,8 +43,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RippleModule,
     RouterModule,
     AppConfigModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ConfirmPopupModule
   ],
   exports: [AppLayoutComponent],
+  providers: [ConfirmationService]
 })
-export class AppLayoutModule { }
+export class AppLayoutModule {}

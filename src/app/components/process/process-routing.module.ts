@@ -6,11 +6,6 @@ const routes: Routes = [
     path: 'groups',
     loadChildren: () =>
       import('./homework/homework.module').then((m) => m.HomeworkModule)
-  },
-  {
-    path: '',
-    redirectTo: 'homework',
-    pathMatch: 'prefix'
   }
 ];
 

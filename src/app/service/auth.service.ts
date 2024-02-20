@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 type RegSteps = 'phone' | 'otp' | 'info';
@@ -13,7 +14,7 @@ export class AuthService {
   registerSteps: RegSteps = 'phone';
   dataIn: 'local' | 'session' | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   sendOtp(phone: string) {
     const tempPhone = phone.replaceAll('-', '');
@@ -132,6 +133,7 @@ export class AuthService {
     this.refreshToken = '';
     localStorage.clear();
     sessionStorage.clear();
+    this.router.navigate(['/auth/login']);
   }
 
   validatePhoneNumber(phone: string) {

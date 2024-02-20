@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'groups',
+    redirectTo: '',
     pathMatch: 'prefix'
   }
 ];

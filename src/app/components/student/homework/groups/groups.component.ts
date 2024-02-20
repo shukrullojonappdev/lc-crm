@@ -31,12 +31,10 @@ export class GroupsComponent implements OnInit {
   }
 
   getGroups() {
-    console.log(this.user);
-
     this.groupsService
       .getGroupsByStudentId(this.user.user.id)
       .subscribe((res: any) => {
-        this.groups = res.results;
+        this.groups = res;
         this.loading = false;
       });
   }
@@ -46,6 +44,6 @@ export class GroupsComponent implements OnInit {
   }
 
   onRowSelect(e: any) {
-    this.router.navigate(['/student/homeworks', e.data.id]);
+    this.router.navigate(['/student/groups', e.data.id, 'homeworks']);
   }
 }

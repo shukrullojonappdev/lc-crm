@@ -6,6 +6,18 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./groups/groups.module').then((m) => m.GroupsModule)
+  },
+  {
+    path: ':groupId/homeworks',
+    loadChildren: () =>
+      import('./homeworks/homeworks-routing.module').then(
+        (m) => m.HomeworksRoutingModule
+      )
+  },
+  {
+    path: '',
+    redirectTo: '',
+    pathMatch: 'prefix'
   }
 ];
 

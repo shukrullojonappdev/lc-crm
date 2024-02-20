@@ -35,15 +35,19 @@
         layoutService.state.profileSidebarVisible
     }"
   >
-    <button class="p-link layout-topbar-button">
+    <!-- <button class="p-link layout-topbar-button">
       <i class="pi pi-calendar"></i>
       <span i18n>Calendar</span>
     </button>
     <button class="p-link layout-topbar-button">
       <i class="pi pi-user"></i>
       <span i18n>Profile</span>
-    </button>
-    <button class="p-link layout-topbar-button layout-topbar-button-danger">
+    </button> -->
+    <p-confirmPopup></p-confirmPopup>
+    <button
+      class="p-link layout-topbar-button layout-topbar-button-danger"
+      (click)="confirm()"
+    >
       <i class="pi pi-sign-out"></i>
       <span i18n>Exit</span>
     </button>
