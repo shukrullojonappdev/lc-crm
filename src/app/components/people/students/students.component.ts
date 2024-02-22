@@ -159,6 +159,8 @@ export class StudentsComponent {
   getCourses(page: number) {
     this.coursesLoading = true;
     this.coursesService.getCourses(page).subscribe((res) => {
+      console.log(res);
+
       if (this.coursesVScroll.length === 0) {
         const tempEmptyArr = [];
         for (let i = 0; i < res.count; i++) {
@@ -169,6 +171,7 @@ export class StudentsComponent {
           });
         }
         this.coursesVScroll = tempEmptyArr;
+        console.log(this.coursesVScroll);
       }
 
       if (this.courses.length !== res.count) {
@@ -184,6 +187,7 @@ export class StudentsComponent {
         this.coursesPage++;
       }
     });
+
     this.coursesLoading = false;
   }
 
@@ -223,7 +227,9 @@ export class StudentsComponent {
     this.getCourses(this.coursesPage);
   }
 
-  openEditStudentDialog(Student: Student) {
+  openEditStudentDialog(student: Student) {
+    console.log(student);
+
     this.editStudentDialog = true;
     this.users = [];
     this.groups = [];
@@ -237,7 +243,7 @@ export class StudentsComponent {
     this.getUsers();
     this.getGroups(this.groupsPage);
     this.getCourses(this.coursesPage);
-    this.editStudentForm.patchValue(Student as any);
+    this.editStudentForm.patchValue(student as any);
   }
 
   openDeleteStudentDialog(Student: Student) {

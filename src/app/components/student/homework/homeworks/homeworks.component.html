@@ -1,6 +1,7 @@
-<!-- <div class="grid">
+<div class="grid">
   <div class="col-12">
     <div class="card px-6 py-6">
+      <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
       <div class="mb-4"></div>
       <p-table
         #dt
@@ -17,7 +18,7 @@
           <div
             class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
           >
-            <h5 class="m-0">Groups</h5>
+            <h5 class="m-0">Homeworks</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -36,34 +37,28 @@
             <th pSortableColumn="id">
               ID <p-sortIcon field="id"></p-sortIcon>
             </th>
-            <th pSortableColumn="title" i18n>
-              Title <p-sortIcon field="title"></p-sortIcon>
+            <th pSortableColumn="course" i18n>
+              Course <p-sortIcon field="course"></p-sortIcon>
             </th>
-            <th pSortableColumn="start_date" i18n>
-              Start date <p-sortIcon field="start_date"></p-sortIcon>
-            </th>
-            <th pSortableColumn="end_date" i18n>
-              End date <p-sortIcon field="end_date"></p-sortIcon>
+            <th pSortableColumn="topic" i18n>
+              Topic <p-sortIcon field="topic"></p-sortIcon>
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-group>
-          <tr [pSelectableRow]="group">
+        <ng-template pTemplate="body" let-homework>
+          <tr [pSelectableRow]="homework">
             <td style="min-width: 10rem">
-              {{ group.code || group.id }}
+              {{ homework.code || homework.id }}
             </td>
             <td style="width: 33%; min-width: 10rem">
-              {{ group.title }}
+              {{ homework.topic.course }}
             </td>
             <td style="width: 33%; min-width: 10rem">
-              {{ group.start_date }}
-            </td>
-            <td style="width: 33%; min-width: 10rem">
-              {{ group.end_date }}
+              {{ homework.topic.title }}
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
   </div>
-</div> -->
+</div>

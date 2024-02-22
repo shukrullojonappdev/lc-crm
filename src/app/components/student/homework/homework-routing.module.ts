@@ -10,9 +10,11 @@ const routes: Routes = [
   {
     path: ':groupId/homeworks',
     loadChildren: () =>
-      import('./homeworks/homeworks-routing.module').then(
-        (m) => m.HomeworksRoutingModule
-      )
+      import('./homeworks/homeworks.module').then((m) => m.HomeworksModule)
+  },
+  {
+    path: ':groupId/homeworks/:hmId',
+    loadChildren: () => import('./edit/edit.module').then((m) => m.EditModule)
   },
   {
     path: '',

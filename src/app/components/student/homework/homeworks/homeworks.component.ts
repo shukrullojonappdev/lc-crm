@@ -27,8 +27,8 @@ export class HomeworksComponent implements OnInit {
     this.initBreadcrumb();
     this.cols = [
       { field: 'id', header: 'ID' },
-      { field: 'full_name', header: 'Fullname' },
-      { field: 'phone', header: 'Phone number' }
+      { field: 'course', header: 'Course' },
+      { field: 'topic', header: 'Topic' }
     ];
     this.groupId = this.route.snapshot.params['groupId'];
     this.getGroupHomes(this.groupId);
@@ -44,8 +44,9 @@ export class HomeworksComponent implements OnInit {
     this.groupHomesService
       .getGHomeworksByGroup(groupId)
       .subscribe((res: any) => {
-        this.groupHomes = res.student;
-        console.log(res);
+        res.filter((e) => {
+          if (e.group == groupId) this.groupHomes.push(e);
+        });
 
         this.loading = false;
       });
@@ -56,6 +57,11 @@ export class HomeworksComponent implements OnInit {
   }
 
   onRowSelect(e: any) {
-    this.router.navigate(['/student/groups', this.groupId, 'homeworks']);
+    this.router.navigate([
+      '/student/groups',
+      this.groupId,
+      'homeworks',
+      e.data.id,
+    ]);
   }
 }

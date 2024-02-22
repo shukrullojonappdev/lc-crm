@@ -84,7 +84,7 @@ export class AppMenuComponent implements OnInit {
         ]
       },
       {
-        label: $localize`Process`,
+        label: $localize`Teacher`,
         items: [
           {
             label: $localize`Groups`,
@@ -102,14 +102,14 @@ export class AppMenuComponent implements OnInit {
         label: $localize`Student`,
         items: [
           {
-            label: $localize`Timetable`,
-            icon: 'pi pi-fw pi-building',
-            routerLink: ['/student/timetable']
-          },
-          {
             label: $localize`Groups`,
             icon: 'pi pi-fw pi-box',
             routerLink: ['/student/groups']
+          },
+          {
+            label: $localize`Timetable`,
+            icon: 'pi pi-fw pi-building',
+            routerLink: ['/student/timetable']
           }
         ]
       }
