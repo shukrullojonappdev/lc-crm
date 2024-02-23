@@ -1,8 +1,41 @@
 <div class="grid">
   <div class="col-12">
     <div class="card px-6 py-6">
+      <p-toast></p-toast>
       <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
       <div class="mb-4"></div>
+      <form [formGroup]="addHomeworkForm">
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="repository">Repository</label>
+          <input pInputText id="repository" formControlName="repository" />
+        </div>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="branch">Branch</label>
+          <input pInputText id="branch" formControlName="branch" />
+        </div>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="is_active">Is active</label>
+          <p-inputSwitch
+            id="is_active"
+            formControlName="is_active"
+          ></p-inputSwitch>
+        </div>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="descriptions">Descriptions</label>
+          <textarea
+            pInputText
+            id="descriptions"
+            formControlName="descriptions"
+          ></textarea>
+        </div>
+        <button
+          (click)="addHomework()"
+          pButton
+          pRipple
+          label="Submit"
+          class="p-button-success mt-2"
+        ></button>
+      </form>
     </div>
   </div>
 </div>

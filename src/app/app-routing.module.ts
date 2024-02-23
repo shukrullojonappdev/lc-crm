@@ -54,6 +54,13 @@ import { authGuard } from './guard/auth.guard';
                 import('./components/student/student.module').then(
                   (m) => m.StudentModule
                 )
+            },
+            {
+              path: 'profile',
+              loadChildren: () =>
+                import('./components/profile/profile.module').then(
+                  (m) => m.ProfileModule
+                )
             }
           ]
         },

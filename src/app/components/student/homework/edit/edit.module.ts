@@ -6,6 +6,9 @@ import { EditComponent } from './edit.component';
 import { PrimeModule } from '../shared/prime.module';
 import { BreadcrumpService } from '../shared/breadcrump.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [EditComponent],
@@ -14,8 +17,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     EditRoutingModule,
     PrimeModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputSwitchModule,
+    ToastModule
   ],
-  providers: [BreadcrumpService]
+  providers: [BreadcrumpService, MessageService]
 })
 export class EditModule {}

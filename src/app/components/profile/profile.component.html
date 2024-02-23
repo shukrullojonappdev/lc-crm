@@ -1,0 +1,43 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <!-- <form [formGroup]="updateProfileForm" class="mb-5">
+        <h3>CRM</h3>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="git_username">Username</label>
+          <input pInputText id="git_username" formControlName="git_username" />
+        </div>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="phone">Phone</label>
+          <input pInputText id="phone" formControlName="phone" />
+        </div>
+        <button
+          (click)="update()"
+          pButton
+          pRipple
+          label="Update"
+          class="p-button-success mt-2"
+        ></button>
+      </form> -->
+      <form [formGroup]="updateProfileForm">
+        <h3>Git</h3>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="git_username">Username</label>
+          <input pInputText id="git_username" formControlName="git_username" />
+        </div>
+        <div class="flex flex-column gap-2 mb-2">
+          <label for="git_token">Token</label>
+          <input pInputText id="git_token" formControlName="git_token" />
+        </div>
+        <button
+          (click)="update()"
+          pButton
+          pRipple
+          label="Update"
+          class="p-button-success mt-2"
+        ></button>
+      </form>
+    </div>
+  </div>
+</div>

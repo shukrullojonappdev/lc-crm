@@ -30,7 +30,7 @@ export class StudentsService {
   }
 
   updateStudent(student: Student) {
-    return this.http.put<Student>(
+    return this.http.patch<Student>(
       `${environment.apiUrl}/api/student/${student.id}/`,
       student
     );
