@@ -43,8 +43,6 @@ export class StudentsComponent implements OnInit {
   getGroupStudents(groupId) {
     this.groupsService.getGroupStudents(groupId).subscribe((res: any) => {
       this.students = res.student;
-      console.log(this.students);
-
       this.loading = false;
     });
   }

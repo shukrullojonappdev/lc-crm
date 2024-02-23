@@ -2,20 +2,7 @@
   <div class="col-12">
     <div class="card p-6">
       <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
-      <p-toolbar>
-        <div class="p-toolbar-group-start">
-          <p-button
-            [text]="true"
-            severity="secondary"
-            icon="pi pi-arrow-left"
-            class="mr-2"
-          ></p-button>
-        </div>
-        <div class="p-toolbar-group-center"></div>
-        <div class="p-toolbar-group-end">
-          <p-button icon="pi pi-save" class="mr-2"></p-button>
-        </div>
-      </p-toolbar>
+      <div class="mb-4"></div>
       <p-splitter [panelSizes]="[25, 75]">
         <ng-template pTemplate>
           <p-tree
