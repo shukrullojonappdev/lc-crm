@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BreadcrumpService } from '../shared/breadcrump.service';
+import { BreadcrumpService } from '../../shared/breadcrump.service';
 import { GroupsService } from 'src/app/service/groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 

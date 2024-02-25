@@ -28,6 +28,8 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
       return next.handle(newRequest);
+    } else if (request.headers.get('Authorization')) {
+      return next.handle(request);
     } else {
       const newReq = request.clone({
         setHeaders: {

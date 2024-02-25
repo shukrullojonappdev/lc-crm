@@ -27,17 +27,17 @@ export class RepoService {
 
   constructor(private http: HttpClient) {}
 
-  getTree(payload: { user: string; repo: string; sha: string }) {
+  getTree(payload: { user: string; repo: string; sha: string; token: string }) {
     return this.http.get<{ tree: GitTree[] }>(
       `${this.gitApiUrl}/repos/${payload.user}/${payload.repo}/git/trees/${payload.sha}`,
-      { headers: { Anonymous: 'true' } }
+      { headers: { Authorization: payload.token } }
     );
   }
 
   getBlob(payload: { user: string; repo: string; sha: string }) {
     return this.http.get<{ tree: GitTree[] }>(
       `${this.gitApiUrl}/repos/${payload.user}/${payload.repo}/git/blobs/${payload.sha}`,
-      { headers: { Anonymous: 'true' } }
+      { headers: { Authorization: 'true' } }
     );
   }
 }

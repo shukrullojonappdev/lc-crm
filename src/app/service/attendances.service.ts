@@ -18,12 +18,26 @@ export class AttendancesService {
     }>(`${environment.apiUrl}/api/attendance?page=${page}`);
   }
 
+  getAttendanceLevels(page: number | 1) {
+    return this.http.get<{
+      count: number;
+      next: string;
+      previous: string;
+      results: any[];
+    }>(`${environment.apiUrl}/api/attendanceLevel?page=${page}`);
+  }
+
   getAttendance(id: string) {
-    return this.http.get<Attendance>(`${environment.apiUrl}/api/attendance/${id}`);
+    return this.http.get<Attendance>(
+      `${environment.apiUrl}/api/attendance/${id}`
+    );
   }
 
   createAttendance(attendance: Attendance) {
-    return this.http.post<Attendance>(`${environment.apiUrl}/api/attendance/`, attendance);
+    return this.http.post<Attendance>(
+      `${environment.apiUrl}/api/attendance/`,
+      attendance
+    );
   }
 
   updateAttendance(attendance: Attendance) {

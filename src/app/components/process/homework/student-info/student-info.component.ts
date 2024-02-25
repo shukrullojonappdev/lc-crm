@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BreadcrumpService } from '../shared/breadcrump.service';
-import { RepoService, Tree } from '../shared/repo.service';
+import { BreadcrumpService } from '../../shared/breadcrump.service';
+import { RepoService, Tree } from '../../shared/repo.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,11 +13,13 @@ export class StudentInfoComponent implements OnInit {
   items: any[] = [];
   text = '';
 
-  data = {
-    user: 'shukrullojondevnu',
-    repo: 'lc-crm',
-    sha: 'dev'
+  data: { user: string; repo: string; sha: string; token: string } = {
+    user: '',
+    repo: '',
+    sha: '',
+    token: ''
   };
+  homeworkId: string;
 
   treeValue: Tree[] = [];
 
@@ -28,6 +30,9 @@ export class StudentInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    const { user, repo, sha, token } = this.route.snapshot.queryParams;
+    this.data = { user, repo, sha, token };
+    this.homeworkId = this.route.snapshot.params['homeworkId'];
     this.initBreadcrumb();
     this.repoService.getTree(this.data).subscribe((res) => {
       const sortedTree = this.sortResultTree(res.tree);
@@ -58,6 +63,9 @@ export class StudentInfoComponent implements OnInit {
     const { home, items } = this.breadcrumpService.getBreadcrumb();
     this.home = home;
     this.items = items;
+    items.push({
+      label: this.homeworkId
+    });
   }
 
   sortResultTree(arr: any[]) {

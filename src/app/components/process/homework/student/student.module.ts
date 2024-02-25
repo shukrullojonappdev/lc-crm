@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { StudentRoutingModule } from './student-routing.module';
 import { StudentComponent } from './student.component';
 
-import { PrimeModule } from '../shared/prime.module';
-import { BreadcrumpService } from '../shared/breadcrump.service';
+import { PrimeModule } from '../../shared/prime.module';
+import { BreadcrumpService } from '../../shared/breadcrump.service';
 
 @NgModule({
   declarations: [StudentComponent],
