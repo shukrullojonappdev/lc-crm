@@ -6,22 +6,22 @@
       <div class="mb-4"></div>
       <form [formGroup]="addHomeworkForm">
         <div class="flex flex-column gap-2 mb-2">
-          <label for="repository">Repository</label>
+          <label for="repository" i18n>Repository</label>
           <input pInputText id="repository" formControlName="repository" />
         </div>
         <div class="flex flex-column gap-2 mb-2">
-          <label for="branch">Branch</label>
+          <label for="branch" i18n>Branch</label>
           <input pInputText id="branch" formControlName="branch" />
         </div>
         <div class="flex flex-column gap-2 mb-2">
-          <label for="is_active">Is active</label>
+          <label for="is_active" i18n>Is active</label>
           <p-inputSwitch
             id="is_active"
             formControlName="is_active"
           ></p-inputSwitch>
         </div>
         <div class="flex flex-column gap-2 mb-2">
-          <label for="descriptions">Descriptions</label>
+          <label for="descriptions" i18n>Descriptions</label>
           <textarea
             pInputText
             id="descriptions"

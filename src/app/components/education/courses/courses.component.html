@@ -8,8 +8,8 @@
             <button
               pButton
               pRipple
-              i18n-label
               label="New"
+              i18n-label
               icon="pi pi-plus"
               class="p-button-success mr-2"
               (click)="openNewCourseDialog()"
@@ -17,8 +17,8 @@
             <button
               pButton
               pRipple
-              i18n-label
               label="Delete"
+              i18n-label
               icon="pi pi-trash"
               class="p-button-danger"
               (click)="openDeleteCoursesDialog()"
@@ -62,7 +62,7 @@
           <div
             class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
           >
-            <h5 class="m-0">Manage courses</h5>
+            <h5 class="m-0" i18n>Manage courses</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -187,11 +187,11 @@
       <ng-template pTemplate="content">
         <form [formGroup]="editCourseForm">
           <div class="field">
-            <label for="name">Title</label>
+            <label for="name" i18n>Title</label>
             <input type="text" pInputText id="name" formControlName="title" />
           </div>
           <div class="field">
-            <label for="description">Description</label>
+            <label for="description" i18n>Description</label>
             <textarea
               id="description"
               pInputTextarea
@@ -232,7 +232,7 @@
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="selectedCourse"
+        <span *ngIf="selectedCourse" i18n
           >Are you sure you want to delete <b>{{ selectedCourse.title }}</b
           >?</span
         >
@@ -266,7 +266,7 @@
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete selected products?</span>
+        <span i18n>Are you sure you want to delete selected products?</span>
       </div>
       <ng-template pTemplate="footer">
         <button

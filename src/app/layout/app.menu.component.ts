@@ -8,13 +8,15 @@ import { LayoutService } from './service/app.layout.service';
 })
 export class AppMenuComponent implements OnInit {
   model: any[] = [];
+  model1: any[] = [];
 
   constructor(public layoutService: LayoutService) {}
 
   ngOnInit() {
-    this.model = [
+    this.model1 = [
       {
         label: $localize`Home`,
+        forRole: ['admin', 'worker', 'student', 'teacher'],
         items: [
           {
             label: $localize`Dashboard`,
@@ -25,6 +27,7 @@ export class AppMenuComponent implements OnInit {
       },
       {
         label: $localize`People`,
+        forRole: ['admin', 'worker'],
         items: [
           {
             label: $localize`Workers`,
@@ -40,6 +43,7 @@ export class AppMenuComponent implements OnInit {
       },
       {
         label: $localize`Education`,
+        forRole: ['admin', 'worker'],
         items: [
           {
             label: $localize`Courses`,
@@ -70,6 +74,7 @@ export class AppMenuComponent implements OnInit {
       },
       {
         label: $localize`Places`,
+        forRole: ['admin', 'worker'],
         items: [
           {
             label: $localize`Departments`,
@@ -85,6 +90,7 @@ export class AppMenuComponent implements OnInit {
       },
       {
         label: $localize`Teacher`,
+        forRole: ['teacher'],
         items: [
           {
             label: $localize`Groups`,
@@ -100,6 +106,7 @@ export class AppMenuComponent implements OnInit {
       },
       {
         label: $localize`Student`,
+        forRole: ['student'],
         items: [
           {
             label: $localize`Groups`,
@@ -114,5 +121,28 @@ export class AppMenuComponent implements OnInit {
         ]
       }
     ];
+
+    this.checkToRole();
+  }
+
+  checkToRole() {
+    let user = null;
+    let interval = setInterval(() => {
+      user = localStorage.getItem('currentUser')
+        ? JSON.parse(localStorage.getItem('currentUser'))
+        : JSON.parse(sessionStorage.getItem('currentUser'));
+
+      if (user) {
+        clearInterval(interval);
+        const tempArr = new Set();
+        this.model1.forEach((e) => {
+          e.forRole.forEach((a: any) => {
+            if (user.hasOwnProperty(`${a}`)) tempArr.add(e);
+          });
+        });
+
+        this.model = [...tempArr];
+      }
+    }, 200);
   }
 }
